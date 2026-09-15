@@ -67,6 +67,18 @@ console.log("locale content:");
   check("EN contact form English", enc.includes("Enquiry Form"));
 }
 
+/* ---- mobile responsiveness markers ---- */
+console.log("mobile:");
+{
+  const [, home] = await text("/");
+  check("viewport meta (width=device-width)", home.includes('name="viewport"') && home.includes("width=device-width"));
+  check("theme-color meta", home.includes('name="theme-color"') && home.includes("#3c1b10"));
+  check("floating WhatsApp (mobile only)", home.includes('aria-label="Chat with Halal World on WhatsApp"') && home.includes("md:hidden"));
+  check("hamburger toggle present", home.includes('aria-label="Toggle menu"'));
+  const [, mlhome] = await text("/ml");
+  check("floating WhatsApp on /ml too", mlhome.includes('aria-label="Chat with Halal World on WhatsApp"'));
+}
+
 /* ---- SEO artifacts ---- */
 console.log("seo artifacts:");
 {

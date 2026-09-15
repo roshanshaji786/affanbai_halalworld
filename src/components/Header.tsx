@@ -67,7 +67,7 @@ export function Header({ locale }: { locale: string }) {
             <Logo />
           </Link>
 
-          <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-6 xl:flex" aria-label="Primary">
             {links.map((l) => (
               <Link
                 key={l.href}
@@ -88,7 +88,7 @@ export function Header({ locale }: { locale: string }) {
             </a>
           </nav>
 
-          <span className="flex items-center gap-3 lg:hidden">
+          <span className="flex items-center gap-3 xl:hidden">
             {langToggle}
             <button
               className="text-cocoa"
@@ -104,7 +104,7 @@ export function Header({ locale }: { locale: string }) {
         </div>
 
         {open && (
-          <nav className="border-cocoa/10 border-t bg-ivory px-4 pb-5 lg:hidden" aria-label="Mobile">
+          <nav className="border-cocoa/10 border-t bg-ivory px-4 pb-5 xl:hidden" aria-label="Mobile">
             {links.map((l) => (
               <Link
                 key={l.href}

@@ -46,11 +46,13 @@ export const metadata: Metadata = {
   },
   icons: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   robots: { index: true, follow: true },
+  themeColor: "#3c1b10",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <meta name="theme-color" content="#3c1b10" />
       <body className="bg-ivory font-body text-ink antialiased">
         <a
           href="#main"
