@@ -1,0 +1,17 @@
+# Render Blueprint — one-click free deployment.
+# Dashboard → New → Blueprint → pick this repo + branch → Apply.
+services:
+  - type: web
+    name: halal-world
+    runtime: node
+    plan: free                      # free tier: spins down when idle, cold start ~30s
+    buildCommand: npm ci --no-audit --no-fund && npm run build
+    startCommand: npm run start     # next start honours Render's $PORT, binds 0.0.0.0
+    healthCheckPath: /
+    envVars:
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASSWORD
+        generateValue: true         # Render generates a strong random password
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://halal-world.onrender.com   # change after adding a custom domain

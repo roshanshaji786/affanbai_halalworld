@@ -18,7 +18,20 @@ The identity is extracted from the studio poster in `brand/poster-original.jpeg`
 - **Assets** — authentic photos cropped from the poster in `public/images/`
   (Makkah clock tower, Madinah Mövenpick, transparent minaret), plus `public/og.jpg`.
 
-## One-command deploy (no prompts)
+## Free cloud deploy — Render (one click)
+
+1. Sign in at render.com with GitHub (free account).
+2. **New → Blueprint**, connect this repo, choose branch
+   `arena/01a0a44e-affanbai-halalworld` (or `main` after merging).
+3. Render reads `render.yaml` → **Apply** → builds & deploys automatically.
+4. Site: `https://halal-world.onrender.com` (free SSL). Admin password:
+   service → *Environment* → `ADMIN_PASSWORD`.
+   Free tier sleeps after ~15 min idle (first visit takes ~30 s to wake).
+
+Leads stored on Render's ephemeral disk reset on redeploy — the WhatsApp
+hand-off is the primary lead channel, so nothing is ever lost.
+
+## One-command deploy (own server / no prompts)
 
 ```bash
 git clone https://github.com/roshanshaji786/affanbai_halalworld.git
