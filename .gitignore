@@ -21,6 +21,10 @@ npm-debug.log*
 # runtime data (leads)
 /data/
 
+# deploy runtime
+.server.pid
+deploy.log
+
 # typescript
 *.tsbuildinfo
 

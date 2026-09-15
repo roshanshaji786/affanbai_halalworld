@@ -18,7 +18,21 @@ The identity is extracted from the studio poster in `brand/poster-original.jpeg`
 - **Assets** — authentic photos cropped from the poster in `public/images/`
   (Makkah clock tower, Madinah Mövenpick, transparent minaret), plus `public/og.jpg`.
 
-## Run
+## One-command deploy (no prompts)
+
+```bash
+git clone https://github.com/roshanshaji786/affanbai_halalworld.git
+cd affanbai_halalworld
+./deploy.sh              # installs, builds, starts prod server, health-checks
+PORT=8080 ./deploy.sh    # custom port
+./deploy.sh stop         # stop
+```
+
+Requires only Node 18+. Generates `.env` with a random admin password on
+first run (printed once, stored in `.env`). Serves on `0.0.0.0` so it works
+behind any reverse proxy / VPS / Vercel-container setup.
+
+## Run (manual)
 
 ```bash
 npm install
@@ -26,7 +40,7 @@ npm run dev        # development
 npm run build      # production build + typecheck
 npm run start      # serve production build
 npm test           # unit tests (Vitest, 19 tests)
-npm run test:e2e   # smoke suite vs live server (47 checks: routes, headers,
+npm run test:e2e   # smoke suite vs live server (52 checks: routes, headers,
                    # locales, JSON-LD, auth gates, validation, rate limiting)
 ```
 
