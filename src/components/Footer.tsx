@@ -24,6 +24,7 @@ export function Footer() {
               ["/packages", "Umrah Packages"],
               ["/destinations", "Destinations"],
               ["/about", "About Us"],
+              ["/blog", "Journal & Guides"],
               ["/contact", "Contact & Enquiry"],
             ].map(([href, label]) => (
               <li key={href}>

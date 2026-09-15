@@ -11,6 +11,7 @@ const links = [
   { href: "/packages", label: "Umrah Packages" },
   { href: "/destinations", label: "Destinations" },
   { href: "/about", label: "About" },
+  { href: "/blog", label: "Journal" },
   { href: "/contact", label: "Contact" },
 ];
 
