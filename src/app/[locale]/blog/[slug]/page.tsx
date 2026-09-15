@@ -7,10 +7,12 @@ import { posts } from "@/lib/posts";
 import { JsonLd, breadcrumbLd } from "@/lib/seo";
 
 export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+  return posts.flatMap((p) =>
+    ["en", "ml"].map((locale) => ({ slug: p.slug, locale })),
+  );
 }
 
-export function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export function generateMetadata({ params }: { params: Promise<{ slug: string; locale: string }> }): Promise<Metadata> {
   return params.then(({ slug }) => {
     const p = posts.find((x) => x.slug === slug);
     if (!p) return { title: "Article not found" };
@@ -29,7 +31,7 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
   });
 }
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PostPage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
   const { slug } = await params;
   const p = posts.find((x) => x.slug === slug);
   if (!p) notFound();

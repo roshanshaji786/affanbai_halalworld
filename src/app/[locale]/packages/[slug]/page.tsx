@@ -4,13 +4,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { inclusionIcon, IconCheck, IconWhatsApp } from "@/components/Icons";
 import { inr, packages, site } from "@/lib/content";
+import { t } from "@/lib/i18n";
 import { JsonLd, breadcrumbLd, productLd } from "@/lib/seo";
 
 export function generateStaticParams() {
-  return packages.map((p) => ({ slug: p.slug }));
+  return packages.flatMap((p) =>
+    ["en", "ml"].map((locale) => ({ slug: p.slug, locale })),
+  );
 }
 
-export function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> | Metadata {
+export function generateMetadata({ params }: { params: Promise<{ slug: string; locale: string }> }): Promise<Metadata> {
   return params.then(({ slug }) => {
     const p = packages.find((x) => x.slug === slug);
     if (!p) return { title: "Package not found" };
@@ -21,10 +24,11 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
   });
 }
 
-export default async function PackageDetail({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function PackageDetail({ params }: { params: Promise<{ slug: string; locale: string }> }) {
+  const { slug, locale } = await params;
   const p = packages.find((x) => x.slug === slug);
   if (!p) notFound();
+  const s = t(locale);
 
   return (
     <>
@@ -32,8 +36,8 @@ export default async function PackageDetail({ params }: { params: Promise<{ slug
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <nav aria-label="Breadcrumb" className="text-ink/60 text-xs font-semibold tracking-widest uppercase">
-              <Link href="/" className="hover:text-gold">Home</Link> /{" "}
-              <Link href="/packages" className="hover:text-gold">Packages</Link> /{" "}
+              <Link href="/" className="hover:text-gold">{s.nav.home}</Link> /{" "}
+              <Link href="/packages" className="hover:text-gold">{s.nav.packages}</Link> /{" "}
               <span className="text-cocoa">{p.title}</span>
             </nav>
             <p className="text-gold mt-6 text-xs font-bold tracking-[0.25em] uppercase">{p.kicker}</p>
@@ -50,7 +54,9 @@ export default async function PackageDetail({ params }: { params: Promise<{ slug
               />
             </div>
 
-            <h2 className="font-display text-cocoa-deep mt-10 text-2xl">What's included</h2>
+            <h2 className="font-display text-cocoa-deep mt-10 text-2xl">
+              {locale === "ml" ? "ഉൾപ്പെടുന്നവ" : "What's included"}
+            </h2>
             <ul className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {p.inclusions.map((inc) => (
                 <li key={inc} className="bg-ivory shadow-card flex items-center gap-3 rounded-xl border border-cocoa/10 p-4">
@@ -65,23 +71,29 @@ export default async function PackageDetail({ params }: { params: Promise<{ slug
 
           <aside className="lg:pt-24">
             <div className="bg-cocoa shadow-lift rounded-3xl p-7">
-              <h2 className="text-gold-soft text-xs font-bold tracking-[0.25em] uppercase">Stay Plan</h2>
+              <h2 className="text-gold-soft text-xs font-bold tracking-[0.25em] uppercase">
+                {locale === "ml" ? "താമസ പദ്ധതി" : "Stay Plan"}
+              </h2>
               <div className="mt-4 space-y-4">
                 <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-gold-soft text-sm font-bold">Makkah · {p.nightsMakkah} nights</p>
+                  <p className="text-gold-soft text-sm font-bold">{s.pkg.makkah} · {p.nightsMakkah} {s.pkg.nights}</p>
                   <p className="text-ivory mt-1 text-sm">{p.hotelMakkah}</p>
                 </div>
                 <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-gold-soft text-sm font-bold">Madinah · {p.nightsMadinah} nights</p>
+                  <p className="text-gold-soft text-sm font-bold">{s.pkg.madinah} · {p.nightsMadinah} {s.pkg.nights}</p>
                   <p className="text-ivory mt-1 text-sm">{p.hotelMadinah}</p>
                 </div>
               </div>
               <div className="border-ivory/20 mt-6 border-t pt-5">
-                <p className="text-ivory/60 text-xs font-semibold tracking-widest uppercase">Package price</p>
-                <p className="font-display text-gold-soft mt-1 text-4xl">
-                  {p.priceINR ? inr(p.priceINR) : "On request"}
+                <p className="text-ivory/60 text-xs font-semibold tracking-widest uppercase">
+                  {locale === "ml" ? "പാക്കേജ് വില" : "Package price"}
                 </p>
-                <p className="text-ivory/60 mt-1 text-xs">per person · instalments available</p>
+                <p className="font-display text-gold-soft mt-1 text-4xl">
+                  {p.priceINR ? inr(p.priceINR) : s.pkg.onRequest}
+                </p>
+                <p className="text-ivory/60 mt-1 text-xs">
+                  {locale === "ml" ? "ഒരാൾക്ക് · ഗഡുക്കളായി നൽകാം" : "per person · instalments available"}
+                </p>
               </div>
               <a
                 href={site.whatsapp}
@@ -89,17 +101,20 @@ export default async function PackageDetail({ params }: { params: Promise<{ slug
                 rel="noopener noreferrer"
                 className="bg-gold text-cocoa-deep hover:bg-gold-soft mt-6 flex items-center justify-center gap-2 rounded-full py-3.5 text-sm font-bold transition-colors"
               >
-                <IconWhatsApp className="h-5 w-5" /> Reserve on WhatsApp
+                <IconWhatsApp className="h-5 w-5" /> {locale === "ml" ? "വാട്ട്സ്ആപ്പിൽ ബുക്ക് ചെയ്യൂ" : "Reserve on WhatsApp"}
               </a>
               <Link
                 href="/contact"
                 className="text-gold-soft mt-3 block rounded-full border-2 border-white/25 py-3 text-center text-sm font-bold hover:border-white/50"
               >
-                Send Enquiry Form
+                {s.cta.enquiry}
               </Link>
               <ul className="text-ivory/70 mt-5 space-y-2 text-xs">
-                {["Seats limited per departure", "Passport must be valid 6+ months", "Prices subject to airline & forex variation"].map((t) => (
-                  <li key={t} className="flex gap-2"><IconCheck className="text-gold-soft h-4 w-4 shrink-0" />{t}</li>
+                {(locale === "ml"
+                  ? ["ഓരോ യാത്രയിലും സീറ്റുകൾ പരിമിതം", "പാസ്പോർട്ട് കാലാവധി 6+ മാസം വേണം", "വില വിമാന/ഫോറെക്സ് വ്യതിയാനത്തിന് വിധേയം"]
+                  : ["Seats limited per departure", "Passport must be valid 6+ months", "Prices subject to airline & forex variation"]
+                ).map((tx) => (
+                  <li key={tx} className="flex gap-2"><IconCheck className="text-gold-soft h-4 w-4 shrink-0" />{tx}</li>
                 ))}
               </ul>
             </div>

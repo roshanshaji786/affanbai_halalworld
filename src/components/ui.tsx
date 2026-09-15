@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star8 } from "@/components/Icons";
 import { inr, site, type Pack } from "@/lib/content";
+import { t } from "@/lib/i18n";
 
 export function SectionHeading({
   kicker,
@@ -28,7 +29,8 @@ export function SectionHeading({
   );
 }
 
-export function PackageCard({ pack }: { pack: Pack }) {
+export function PackageCard({ pack, locale = "en" }: { pack: Pack; locale?: string }) {
+  const s = t(locale);
   return (
     <article className="group bg-ivory shadow-card hover:shadow-lift overflow-hidden rounded-2xl border border-cocoa/10 transition-shadow">
       <div className="relative h-52 overflow-hidden">
@@ -50,19 +52,19 @@ export function PackageCard({ pack }: { pack: Pack }) {
 
         <ul className="mt-4 space-y-1.5 text-sm text-ink/80">
           <li className="flex justify-between gap-3">
-            <span className="text-ink/50">Makkah · {pack.nightsMakkah}N</span>
+            <span className="text-ink/50">{s.pkg.makkah} · {pack.nightsMakkah}{s.pkg.nights}</span>
             <span className="font-medium text-right">{pack.hotelMakkah}</span>
           </li>
           <li className="flex justify-between gap-3">
-            <span className="text-ink/50">Madinah · {pack.nightsMadinah}N</span>
+            <span className="text-ink/50">{s.pkg.madinah} · {pack.nightsMadinah}{s.pkg.nights}</span>
             <span className="font-medium text-right">{pack.hotelMadinah}</span>
           </li>
         </ul>
 
         <div className="bg-sand mt-5 flex items-center justify-between rounded-xl px-4 py-3">
-          <span className="text-ink/60 text-xs font-semibold tracking-widest uppercase">From</span>
+          <span className="text-ink/60 text-xs font-semibold tracking-widest uppercase">{s.pkg.from}</span>
           <span className="font-display text-cocoa text-2xl">
-            {pack.priceINR ? inr(pack.priceINR) : "On request"}
+            {pack.priceINR ? inr(pack.priceINR) : s.pkg.onRequest}
           </span>
         </div>
 
@@ -71,7 +73,7 @@ export function PackageCard({ pack }: { pack: Pack }) {
             href={`/packages/${pack.slug}`}
             className="bg-cocoa text-ivory hover:bg-cocoa-deep flex-1 rounded-full py-2.5 text-center text-sm font-bold transition-colors"
           >
-            View Details
+            {s.pkg.view}
           </Link>
           <a
             href={site.whatsapp}
@@ -79,7 +81,7 @@ export function PackageCard({ pack }: { pack: Pack }) {
             rel="noopener noreferrer"
             className="border-cocoa/30 text-cocoa hover:border-gold hover:text-gold flex-1 rounded-full border-2 py-2.5 text-center text-sm font-bold transition-colors"
           >
-            Enquire
+            {s.pkg.enquire}
           </a>
         </div>
       </div>

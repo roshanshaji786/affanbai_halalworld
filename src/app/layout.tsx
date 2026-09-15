@@ -7,8 +7,6 @@ import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 import "@fontsource/amiri/400.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { site } from "@/lib/content";
 import { JsonLd, travelAgencyLd } from "@/lib/seo";
 import "./globals.css";
@@ -60,9 +58,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <Header />
         <main id="main">{children}</main>
-        <Footer />
         <JsonLd data={travelAgencyLd()} />
       </body>
     </html>

@@ -29,14 +29,16 @@ const destinations = [
   },
 ];
 
-export default function Destinations() {
+export default async function Destinations({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const ml = locale === "ml";
   return (
     <section className="bg-starlattice">
       <div className="mx-auto max-w-7xl px-4 py-20">
         <SectionHeading
-          kicker="Where we take you"
-          title="The Two Holy Cities"
-          sub="Every Halal World journey is built around comfort, closeness to the Haram, and unhurried worship."
+          kicker={ml ? "ഞങ്ങൾ കൊണ്ടുപോകുന്ന ഇടങ്ങൾ" : "Where we take you"}
+          title={ml ? "വിശുദ്ധ നഗരങ്ങൾ" : "The Two Holy Cities"}
+          sub={ml ? "ആരാധനയ്ക്ക് അടുത്ത്, സമാധാനപൂർണ്ണമായ താമസം — ഓരോ ഹലാൽ വേൾഡ് യാത്രയും." : "Every Halal World journey is built around comfort, closeness to the Haram, and unhurried worship."}
         />
         <div className="mt-12 grid gap-8 lg:grid-cols-2">
           {destinations.map((d) => (
@@ -62,10 +64,13 @@ export default function Destinations() {
 
         <div className="bg-cocoa mt-14 rounded-3xl p-8 text-center">
           <Star8 className="text-gold-soft mx-auto h-6 w-6" />
-          <h2 className="font-display text-ivory mt-3 text-2xl sm:text-3xl">Halal holidays — coming soon</h2>
+          <h2 className="font-display text-ivory mt-3 text-2xl sm:text-3xl">
+            {ml ? "ഹലാൽ ഹോളിഡേകൾ — ഉടൻ" : "Halal holidays — coming soon"}
+          </h2>
           <p className="text-ivory/70 mx-auto mt-3 max-w-2xl text-sm">
-            Malaysia, Türkiye and the Emirates on fully halal itineraries — halal food guarantees, prayer-friendly
-            schedules and family-first pacing. Register your interest on WhatsApp and be first to hear.
+            {ml
+              ? "മലേഷ്യ, തുർക്കി, എമിറേറ്റ്സ് — പൂർണ്ണ ഹലാൽ യാത്രകൾ. താൽപ്പര്യം WhatsApp-ൽ അറിയിക്കൂ; ആദ്യം അറിയൂ."
+              : "Malaysia, Türkiye and the Emirates on fully halal itineraries — halal food guarantees, prayer-friendly schedules and family-first pacing. Register your interest on WhatsApp and be first to hear."}
           </p>
           <a
             href={site.whatsapp}
@@ -73,7 +78,7 @@ export default function Destinations() {
             rel="noopener noreferrer"
             className="bg-gold text-cocoa-deep hover:bg-gold-soft mt-6 inline-block rounded-full px-7 py-3 text-sm font-bold transition-colors"
           >
-            Join the Waitlist
+            {ml ? "വെയ്റ്റ്ലിസ്റ്റിൽ ചേരൂ" : "Join the Waitlist"}
           </a>
         </div>
       </div>
