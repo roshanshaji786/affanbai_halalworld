@@ -3,15 +3,19 @@ import { site } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
 import { IconMail, IconPhone, IconPin, IconWhatsApp } from "@/components/Icons";
+import { ED_BG, edText } from "@/lib/ed";
+import { ovBg, tx } from "@/lib/overrides";
 
 export function Footer({ locale }: { locale: string }) {
   const s = t(locale);
   return (
-    <footer className="bg-starlattice-dark text-ivory/85">
+    <footer className="bg-starlattice-dark text-ivory/85" style={ovBg("footer")} {...ED_BG("footer")}>
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo light />
-          <p className="mt-4 text-sm leading-relaxed text-ivory/70">{s.footer.blurb}</p>
+          <p className="mt-4 text-sm leading-relaxed text-ivory/70" {...edText(locale, "footer.blurb")}>
+            {tx(locale, "footer.blurb", s.footer.blurb)}
+          </p>
         </div>
 
         <nav aria-label="Footer">
@@ -35,11 +39,15 @@ export function Footer({ locale }: { locale: string }) {
         </nav>
 
         <div>
-          <h3 className="text-gold-soft font-display text-lg">{s.footer.departures}</h3>
+          <h3 className="text-gold-soft font-display text-lg" {...edText(locale, "footer.departures")}>
+            {tx(locale, "footer.departures", s.footer.departures)}
+          </h3>
           <ul className="mt-4 space-y-2 text-sm text-ivory/70">
             <li>Kochi (COK) · Calicut (CCJ)</li>
             <li>Trivandrum (TRV)</li>
-            <li className="pt-2 text-ivory/90 font-semibold">{s.footer.next}</li>
+            <li className="pt-2 text-ivory/90 font-semibold" {...edText(locale, "footer.next")}>
+              {tx(locale, "footer.next", s.footer.next)}
+            </li>
           </ul>
         </div>
 
@@ -68,8 +76,8 @@ export function Footer({ locale }: { locale: string }) {
 
       <div className="border-t border-ivory/10">
         <div className="text-ivory/60 mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs sm:flex-row">
-          <p>© {new Date().getFullYear()} {site.legalName}, {site.city}. {s.footer.rights}</p>
-          <p>{s.footer.crafted}</p>
+          <p>© {new Date().getFullYear()} {site.legalName}, {site.city}. {tx(locale, "footer.rights", s.footer.rights)}</p>
+          <p {...edText(locale, "footer.crafted")}>{tx(locale, "footer.crafted", s.footer.crafted)}</p>
         </div>
       </div>
     </footer>

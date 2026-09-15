@@ -8,6 +8,8 @@ import {
 import { faqs, inr, packages, site, testimonials } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import { JsonLd, faqLd } from "@/lib/seo";
+import { ED_BG, ED_IMG, ED_TEXT, edGlobal, edText } from "@/lib/ed";
+import { ovAsset, ovBg, tg, tx } from "@/lib/overrides";
 
 /* Stats are launch placeholders — confirm exact figures with the client. */
 const statNums = ["12+", "1,500+", "40+", "4.9/5"];
@@ -29,20 +31,23 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   return (
     <>
       {/* HERO */}
-      <section className="bg-starlattice relative overflow-hidden">
+      <section className="bg-starlattice relative overflow-hidden" style={ovBg("hero")} {...ED_BG("hero")}>
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pt-14 pb-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-mahogany flex items-center gap-2 text-xs font-bold tracking-[0.3em] uppercase">
-              <Star8 className="text-gold h-4 w-4" /> {s.hero.city}
+            <p className="text-mahogany flex items-center gap-2 text-xs font-bold tracking-[0.3em] uppercase" {...edText(locale, "hero.city")}>
+              <Star8 className="text-gold h-4 w-4" /> {tx(locale, "hero.city", s.hero.city)}
             </p>
             <h1 className="font-display text-cocoa-deep mt-5 text-5xl leading-[1.05] sm:text-6xl xl:text-7xl">
-              {s.hero.h1a} <span className="text-cocoa">{s.hero.h1b}</span>,<br />
-              {s.hero.h1c}
+              <span {...edText(locale, "hero.h1a")}>{tx(locale, "hero.h1a", s.hero.h1a)}</span>{" "}
+              <span className="text-cocoa" {...edText(locale, "hero.h1b")}>{tx(locale, "hero.h1b", s.hero.h1b)}</span>,<br />
+              <span {...edText(locale, "hero.h1c")}>{tx(locale, "hero.h1c", s.hero.h1c)}</span>
             </h1>
-            <p className="font-arabic text-mahogany mt-4 text-2xl" dir="rtl" lang="ar">
-              {site.arabicTagline}
+            <p className="font-arabic text-mahogany mt-4 text-2xl" dir="rtl" lang="ar" {...edGlobal("arabicTagline")}>
+              {tg("arabicTagline", site.arabicTagline)}
             </p>
-            <p className="text-ink/70 mt-3 max-w-xl text-base leading-relaxed sm:text-lg">{s.hero.sub}</p>
+            <p className="text-ink/70 mt-3 max-w-xl text-base leading-relaxed sm:text-lg" {...edText(locale, "hero.sub")}>
+              {tx(locale, "hero.sub", s.hero.sub)}
+            </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
               <a
@@ -50,8 +55,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-cocoa text-ivory hover:bg-cocoa-deep inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold shadow-lg transition-colors"
+                {...edText(locale, "hero.ctaWa")}
               >
-                <IconWhatsApp className="h-5 w-5" /> {s.hero.ctaWa}
+                <IconWhatsApp className="h-5 w-5" /> {tx(locale, "hero.ctaWa", s.hero.ctaWa)}
               </a>
               <a
                 href={site.phoneHref}
@@ -76,9 +82,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </div>
           </div>
 
-          <div className="relative mx-auto h-[420px] w-full max-w-md lg:h-[560px]">
+          <div className="relative mx-auto h-[420px] w-full max-w-md lg:h-[560px]" {...ED_IMG("hero")}>
             <Image
-              src="/images/minaret.png"
+              src={ovAsset("img.hero") ?? "/images/minaret.png"}
               alt="Minaret of the Prophet's Mosque, Madinah"
               fill
               priority
@@ -97,12 +103,16 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </div>
         </div>
 
-        <div className="bg-cocoa relative">
+        <div className="bg-cocoa relative" style={ovBg("stats")} {...ED_BG("stats")}>
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-8 text-center md:grid-cols-4">
             {statNums.map((n, i) => (
               <div key={n}>
-                <p className="font-display text-gold-soft text-3xl sm:text-4xl">{n}</p>
-                <p className="text-ivory/70 mt-1 text-xs font-semibold tracking-widest uppercase">{s.stats[i]}</p>
+                <p className="font-display text-gold-soft text-3xl sm:text-4xl" {...ED_TEXT(`global.stats.num.${i}`)}>
+                  {tg(`stats.num.${i}`, n)}
+                </p>
+                <p className="text-ivory/70 mt-1 text-xs font-semibold tracking-widest uppercase" {...edText(locale, `stats.${i}`)}>
+                  {tx(locale, `stats.${i}`, s.stats[i])}
+                </p>
               </div>
             ))}
           </div>
@@ -112,9 +122,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       {/* PACKAGES */}
       <section className="mx-auto max-w-7xl px-4 py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading kicker={s.pkg.kicker} title={s.pkg.title} sub={s.pkg.sub} />
-          <Link href="/packages" className="text-cocoa hover:text-gold text-sm font-bold tracking-wide uppercase">
-            {s.pkg.all}
+          <SectionHeading
+            edPrefix={`${locale}.pkg`}
+            kicker={tx(locale, "pkg.kicker", s.pkg.kicker)}
+            title={tx(locale, "pkg.title", s.pkg.title)}
+            sub={tx(locale, "pkg.sub", s.pkg.sub)}
+          />
+          <Link href="/packages" className="text-cocoa hover:text-gold text-sm font-bold tracking-wide uppercase" {...edText(locale, "pkg.all")}>
+            {tx(locale, "pkg.all", s.pkg.all)}
           </Link>
         </div>
         <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -125,16 +140,21 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* JOURNEY */}
-      <section className="bg-sand">
+      <section className="bg-sand" style={ovBg("journey")} {...ED_BG("journey")}>
         <div className="mx-auto max-w-7xl px-4 py-20">
-          <SectionHeading kicker={s.journey.kicker} title={s.journey.title} sub={s.journey.sub} />
+          <SectionHeading
+            edPrefix={`${locale}.journey`}
+            kicker={tx(locale, "journey.kicker", s.journey.kicker)}
+            title={tx(locale, "journey.title", s.journey.title)}
+            sub={tx(locale, "journey.sub", s.journey.sub)}
+          />
           <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {journey.map((j, i) => (
               <li key={j.t} className="bg-ivory shadow-card relative rounded-2xl p-5">
                 <span className="font-display text-gold text-4xl">{i + 1}</span>
                 <j.icon className="text-cocoa mt-2 h-7 w-7" />
-                <h3 className="text-cocoa-deep mt-3 font-bold">{j.t}</h3>
-                <p className="text-ink/60 mt-1 text-sm">{j.d}</p>
+                <h3 className="text-cocoa-deep mt-3 font-bold" {...ED_TEXT(`global.journey.${i}.t`)}>{tg(`journey.${i}.t`, j.t)}</h3>
+                <p className="text-ink/60 mt-1 text-sm" {...ED_TEXT(`global.journey.${i}.d`)}>{tg(`journey.${i}.d`, j.d)}</p>
               </li>
             ))}
           </ol>
@@ -143,7 +163,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
       {/* WHY US */}
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <SectionHeading kicker={s.why.kicker} title={s.why.title} sub={s.why.sub} />
+        <SectionHeading
+          edPrefix={`${locale}.why`}
+          kicker={tx(locale, "why.kicker", s.why.kicker)}
+          title={tx(locale, "why.title", s.why.title)}
+          sub={tx(locale, "why.sub", s.why.sub)}
+        />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {s.why.items.map((w, i) => {
             const Ic = whyIcons[i];
@@ -152,8 +177,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <span className="bg-sand text-cocoa group-hover:bg-cocoa group-hover:text-gold-soft inline-flex rounded-xl p-3 transition-colors">
                   <Ic className="h-6 w-6" />
                 </span>
-                <h3 className="text-cocoa-deep mt-4 text-lg font-bold">{w[0]}</h3>
-                <p className="text-ink/65 mt-2 text-sm leading-relaxed">{w[1]}</p>
+                <h3 className="text-cocoa-deep mt-4 text-lg font-bold" {...edText(locale, `why.items.${i}.0`)}>
+                  {tx(locale, `why.items.${i}.0`, w[0])}
+                </h3>
+                <p className="text-ink/65 mt-2 text-sm leading-relaxed" {...edText(locale, `why.items.${i}.1`)}>
+                  {tx(locale, `why.items.${i}.1`, w[1])}
+                </p>
               </div>
             );
           })}
@@ -161,20 +190,30 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="bg-starlattice-dark">
+      <section className="bg-starlattice-dark" style={ovBg("testi")} {...ED_BG("testi")}>
         <div className="mx-auto max-w-7xl px-4 py-20">
-          <SectionHeading light kicker={s.testi.kicker} title={s.testi.title} />
+          <SectionHeading
+            light
+            edPrefix={`${locale}.testi`}
+            kicker={tx(locale, "testi.kicker", s.testi.kicker)}
+            title={tx(locale, "testi.title", s.testi.title)}
+          />
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {testimonials.map((tm) => (
+            {testimonials.map((tm, i) => (
               <figure key={tm.name} className="rounded-2xl border border-ivory/10 bg-white/5 p-6 backdrop-blur">
                 <div className="text-gold-soft flex gap-1" aria-label="5 star rating">
-                  {[...Array(5)].map((_, i) => (
-                    <Star8 key={i} className="h-4 w-4" />
+                  {[...Array(5)].map((_, j) => (
+                    <Star8 key={j} className="h-4 w-4" />
                   ))}
                 </div>
-                <blockquote className="text-ivory/85 mt-4 text-sm leading-relaxed">“{tm.text}”</blockquote>
+                <blockquote className="text-ivory/85 mt-4 text-sm leading-relaxed" {...ED_TEXT(`global.testi.${i}.text`)}>
+                  “{tg(`testi.${i}.text`, tm.text)}”
+                </blockquote>
                 <figcaption className="text-gold-soft mt-4 text-sm font-bold">
-                  {tm.name} <span className="text-ivory/50 font-normal">· {tm.place}</span>
+                  <span {...ED_TEXT(`global.testi.${i}.name`)}>{tg(`testi.${i}.name`, tm.name)}</span>{" "}
+                  <span className="text-ivory/50 font-normal">
+                    · <span {...ED_TEXT(`global.testi.${i}.place`)}>{tg(`testi.${i}.place`, tm.place)}</span>
+                  </span>
                 </figcaption>
               </figure>
             ))}
@@ -184,15 +223,21 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
       {/* FAQ */}
       <section className="mx-auto max-w-4xl px-4 py-20">
-        <SectionHeading kicker={s.faq.kicker} title={s.faq.title} />
+        <SectionHeading
+          edPrefix={`${locale}.faq`}
+          kicker={tx(locale, "faq.kicker", s.faq.kicker)}
+          title={tx(locale, "faq.title", s.faq.title)}
+        />
         <div className="mt-10 space-y-4">
-          {faqs.map((f) => (
+          {faqs.map((f, i) => (
             <details key={f.q} className="group bg-ivory shadow-card rounded-2xl border border-cocoa/10 p-5">
               <summary className="text-cocoa-deep flex cursor-pointer list-none items-center justify-between font-bold">
-                {f.q}
+                <span {...ED_TEXT(`global.faq.${i}.q`)}>{tg(`faq.${i}.q`, f.q)}</span>
                 <span className="text-gold text-2xl transition-transform group-open:rotate-45">+</span>
               </summary>
-              <p className="text-ink/70 mt-3 text-sm leading-relaxed">{f.a}</p>
+              <p className="text-ink/70 mt-3 text-sm leading-relaxed" {...ED_TEXT(`global.faq.${i}.a`)}>
+                {tg(`faq.${i}.a`, f.a)}
+              </p>
             </details>
           ))}
         </div>
@@ -200,10 +245,12 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* CTA */}
-      <section className="bg-cocoa relative overflow-hidden">
+      <section className="bg-cocoa relative overflow-hidden" style={ovBg("cta")} {...ED_BG("cta")}>
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-16 text-center">
           <Star8 className="text-gold-soft h-8 w-8" />
-          <h2 className="font-display text-ivory max-w-2xl text-3xl sm:text-4xl">{s.cta.title}</h2>
+          <h2 className="font-display text-ivory max-w-2xl text-3xl sm:text-4xl" {...edText(locale, "cta.title")}>
+            {tx(locale, "cta.title", s.cta.title)}
+          </h2>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href={site.whatsapp}

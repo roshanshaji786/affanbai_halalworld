@@ -13,7 +13,15 @@ export default async function Admin() {
   return (
     <section className="bg-starlattice min-h-screen">
       <div className="mx-auto max-w-6xl px-4 py-16">
-        <h1 className="font-display text-cocoa-deep text-4xl">Enquiry Leads</h1>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="font-display text-cocoa-deep text-4xl">Enquiry Leads</h1>
+          <a
+            href="/admin/editor"
+            className="bg-cocoa text-ivory hover:bg-cocoa-deep rounded-full px-5 py-2.5 text-sm font-bold shadow-md transition-colors"
+          >
+            🎨 Open Live Editor
+          </a>
+        </div>
         <p className="text-ink/60 mt-2 text-sm">
           {leads.length} lead{leads.length === 1 ? "" : "s"} captured · stored locally in{" "}
           <code className="bg-sand rounded px-1">data/leads.json</code>

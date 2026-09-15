@@ -15,3 +15,8 @@ services:
         generateValue: true         # Render generates a strong random password
       - key: NEXT_PUBLIC_SITE_URL
         value: https://halal-world.onrender.com   # change after adding a custom domain
+      # Live-editor + leads store. Free tier disk is ephemeral (edits reset on
+      # redeploy). For permanent edits: attach a Render Disk, mount it, and set
+      # e.g. DATA_DIR=/opt/render/home/data
+      - key: DATA_DIR
+        value: data

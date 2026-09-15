@@ -102,6 +102,57 @@ console.log("auth gates:");
   check("/admin wrong password → 401", r2.status === 401, `(got ${r2.status})`);
   const r3 = await get("/api/leads");
   check("GET /api/leads unauthenticated → 401", r3.status === 401, `(got ${r3.status})`);
+  const r4 = await get("/admin/editor");
+  check("/admin/editor unauthenticated → 401", r4.status === 401, `(got ${r4.status})`);
+  const r5 = await fetch(BASE + "/api/editor", { method: "POST" });
+  check("POST /api/editor unauthenticated → 401", r5.status === 401, `(got ${r5.status})`);
+}
+
+/* ---- live editor (requires ADMIN_PASSWORD env) ---- */
+console.log("live editor:");
+{
+  const pass = process.env.ADMIN_PASSWORD;
+  if (!pass) {
+    console.log("  (skipped — set ADMIN_PASSWORD to run editor checks)");
+  } else {
+    const auth = { authorization: "Basic " + Buffer.from(`admin:${pass}`).toString("base64") };
+    const post = (body) =>
+      fetch(BASE + "/api/editor", { method: "POST", headers: { ...auth, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+
+    const [, home] = await text("/");
+    check("home carries data-ed hooks", home.includes('data-ed="text.en.hero.h1a"'));
+    {
+      const r = await fetch(BASE + "/en?__edit=1");
+      check("edit canvas → X-Frame-Options SAMEORIGIN", r.headers.get("x-frame-options") === "SAMEORIGIN", `(${r.headers.get("x-frame-options")})`);
+      check("edit canvas → frame-ancestors 'self'", (r.headers.get("content-security-policy") ?? "").includes("frame-ancestors 'self'"));
+      const r2 = await fetch(BASE + "/");
+      check("public page → frame-ancestors 'none'", (r2.headers.get("content-security-policy") ?? "").includes("frame-ancestors 'none'"));
+    }
+
+    const s1 = await post({ key: "text.en.cta.title", value: "Smoke edit ✓" });
+    check("save text override → 200", s1.status === 200, `(got ${s1.status})`);
+    const [, h2] = await text("/");
+    check("override visible on live page", h2.includes("Smoke edit ✓"));
+    const [, h3] = await text("/ml");
+    check("override does not leak into other locale", !h3.includes("Smoke edit ✓"));
+
+    const bad = await post({ key: "../../etc", value: "x" });
+    check("invalid key rejected → 422", bad.status === 422, `(got ${bad.status})`);
+
+    const s2 = await post({ key: "bg.cta", value: { color: "#012345" } });
+    check("save bg override → 200", s2.status === 200, `(got ${s2.status})`);
+    const [, h4] = await text("/");
+    check("bg override rendered as inline style", h4.includes("background-color:#012345"));
+
+    const s3 = await post({ key: "text.en.cta.title", value: null });
+    await post({ key: "bg.cta", value: null });
+    check("reset override → 200", s3.status === 200, `(got ${s3.status})`);
+    const [, h5] = await text("/");
+    check("reset restores coded default", h5.includes("Your journey to the two Holy Mosques"));
+
+    const tr = await fetch(BASE + "/api/editor/files/..%2F..%2Fcontent.json");
+    check("file traversal blocked", tr.status === 400 || tr.status === 404, `(got ${tr.status})`);
+  }
 }
 
 /* ---- leads API: validation + rate limit ---- */
