@@ -25,6 +25,9 @@ npm install
 npm run dev        # development
 npm run build      # production build + typecheck
 npm run start      # serve production build
+npm test           # unit tests (Vitest, 19 tests)
+npm run test:e2e   # smoke suite vs live server (47 checks: routes, headers,
+                   # locales, JSON-LD, auth gates, validation, rate limiting)
 ```
 
 ## Pages

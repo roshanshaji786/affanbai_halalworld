@@ -12,8 +12,9 @@ export function Header({ locale }: { locale: string }) {
   const [open, setOpen] = useState(false);
   const s = t(locale);
   const pathname = usePathname();
-  const isMl = pathname.startsWith("/ml");
-  const base = isMl ? pathname.slice(3) || "/" : pathname;
+  // usePathname returns the *rewritten* path (/en/…) — strip any locale prefix
+  const base = pathname.replace(/^\/(en|ml)/, "") || "/";
+  const isMl = locale === "ml";
 
   const links = [
     { href: "/", label: s.nav.home },
