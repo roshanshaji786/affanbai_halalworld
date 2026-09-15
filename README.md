@@ -55,7 +55,16 @@ Permissions-Policy, COOP/CORP, `X-Powered-By` disabled, self-hosted fonts,
 `rel="noopener"` on external links, client-side input validation on the
 enquiry form, immutable caching for hashed assets.
 
-## Roadmap (milestone 2)
+## Milestone 2 (shipped): lead capture + admin
 
-Lead-capture backend + admin, email notifications, Razorpay checkout (UPI /
-cards), blog for long-tail SEO, Malayalam locale.
+- `POST /api/leads` — validated (Indian mobile regex), rate-limited
+  (5 req/min/IP), stores to `data/leads.json` (gitignored).
+- `/admin` — leads dashboard (IST timestamps, tel: links), gated by
+  HTTP Basic auth in `src/middleware.ts`. Set `ADMIN_USER` /
+  `ADMIN_PASSWORD` in the environment; **fails closed (503) if unset**.
+- Contact form saves the lead first, then hands off to WhatsApp.
+
+## Roadmap (milestone 3)
+
+Razorpay checkout (UPI / cards — needs merchant keys), email notifications,
+blog for long-tail SEO, Malayalam locale.

@@ -10,6 +10,7 @@ const inputCls =
 export default function Contact() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", pack: packages[0].title, travellers: "2", message: "" });
   const [error, setError] = useState("");
+  const [sent, setSent] = useState("");
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm({ ...form, [k]: e.target.value });
@@ -20,6 +21,15 @@ export default function Contact() {
     if (!/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g, ""))) return setError("Please enter a valid 10-digit Indian mobile number.");
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) return setError("That email doesn't look right.");
     setError("");
+    setSent("Saving your enquiry…");
+    // Store the lead server-side, then hand off to WhatsApp.
+    fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    })
+      .then((r) => (r.ok ? setSent("Enquiry saved! Opening WhatsApp…") : setSent("Opening WhatsApp…")))
+      .catch(() => setSent("Opening WhatsApp…"));
     const text =
       `Assalamu alaikum Halal World!%0A` +
       `Name: ${encodeURIComponent(form.name)}%0A` +
@@ -96,6 +106,7 @@ export default function Contact() {
           <button type="submit" className="bg-cocoa text-ivory hover:bg-cocoa-deep mt-6 w-full rounded-full py-3.5 text-sm font-bold transition-colors">
             Send via WhatsApp →
           </button>
+          {sent && <p role="status" className="text-gold mt-3 text-center text-sm font-bold">{sent}</p>}
           <p className="text-ink/50 mt-3 text-xs">Your details go only to our team over WhatsApp. No spam, ever.</p>
         </form>
       </div>
