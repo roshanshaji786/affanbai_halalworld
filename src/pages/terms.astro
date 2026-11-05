@@ -1,0 +1,10 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../data/site';
+---
+<Legal title="Terms and conditions" description={`Booking terms for ${site.name} Umrah packages.`} path="/terms/">
+  <h2>Quotes and fares</h2><p>Fares on this website are starting prices per person and may change with season, room sharing, airline fares and exchange rates. Your fare is confirmed in writing before payment.</p>
+  <h2>Payments</h2><p>An advance holds your seat. The balance is due before your visa is filed. We issue a receipt for every payment.</p>
+  <h2>Visas</h2><p>Visas are issued at the discretion of Saudi authorities. We check documents carefully but cannot guarantee approval.</p>
+  <h2>Changes</h2><p>Hotels may be replaced with ones of the same class if needed. Itineraries may change because of flight times or local rules.</p>
+</Legal>

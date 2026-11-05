@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Enquiry from '../components/Enquiry.astro';
+import { arabic, site, waLink } from '../data/site';
+const crumbs = [{ name: 'Umrah visa', href: '/umrah-visa/' }];
+const vf = [
+  { q: 'Can I get only the Umrah visa from you?', a: 'Yes. We can file the visa alone, or add it to a land package if you already have flights.' },
+  { q: 'Do I need to visit an embassy?', a: 'No. The Umrah visa is applied for online through an authorised agent. You only share scans with us.' },
+  { q: 'How long is the Umrah visa valid?', a: 'Validity and length of stay are set by Saudi authorities and have changed over time. We confirm the current rules when you apply.' },
+  { q: 'Can I do Umrah on a tourist visa?', a: 'Saudi tourist e-visas have allowed Umrah outside the Hajj season in recent years. Eligibility depends on your passport and visas, so ask us and we will check.' },
+];
+const schema = [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: vf.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }];
+---
+<Base title="Umrah visa from India: documents and process" description="Apply for your Saudi Umrah visa from Kerala with Halal World. The documents you need, how long it takes, and how we check every detail before filing." crumbs={crumbs} schema={schema}>
+  <PageHero title='Umrah visa <span class="accent">from India</span>' lead="We file your Saudi Umrah e-visa as an authorised agent and check every document first, so your application goes in right the first time." crumbs={crumbs} ar={arabic.journey} />
+  <section class="section">
+    <div class="container with-aside">
+      <div class="prose">
+        <h2>Documents you need</h2>
+        <ul class="ticks">
+          <li><Icon name="check" /><span>Passport valid for at least six months from your travel date, with two blank pages.</span></li>
+          <li><Icon name="check" /><span>A recent passport-size photo with a white background.</span></li>
+          <li><Icon name="check" /><span>Any vaccination certificate currently required for Umrah pilgrims.</span></li>
+          <li><Icon name="check" /><span>For family groups, details of who is travelling together.</span></li>
+        </ul>
+        <p class="note">Saudi rules change from time to time. We send you the up-to-date checklist when you enquire, so you never rely on an old list.</p>
+        <h2>How it works</h2>
+        <ol>
+          <li>Send clear scans of your passport and photo on WhatsApp.</li>
+          <li>We check names, dates and photo quality against the visa rules.</li>
+          <li>We file your Umrah e-visa and share updates on WhatsApp.</li>
+          <li>You receive the visa as a PDF. Print one copy and keep it with your passport.</li>
+        </ol>
+        <h2>How long it takes</h2>
+        <p>Usually a few working days once all documents are complete. Apply three to four weeks before your travel date, and earlier for Ramadan and school holidays.</p>
+        <h2>Questions</h2>
+        <Faq items={vf} />
+      </div>
+      <aside class="aside-sticky"><div class="aside-card">
+        <h3>Start your visa today</h3>
+        <p style="color:rgba(246,240,230,.75)">Send your passport scan on WhatsApp and we’ll check it for free.</p>
+        <a class="btn btn--wa" href={waLink('Assalamu alaikum, I need help with an Umrah visa.')} target="_blank" rel="noopener" data-wa="visa"><Icon name="whatsapp" />WhatsApp us</a>
+        <a class="btn btn--ghost" href={`tel:${site.phoneE164}`}><Icon name="phone" />Call {site.phone}</a>
+      </div></aside>
+    </div>
+  </section>
+  <Enquiry />
+</Base>

@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import PackageCard from '../../components/PackageCard.astro';
+import Kicker from '../../components/Kicker.astro';
+import Enquiry from '../../components/Enquiry.astro';
+import { packages, arabic, inr, site } from '../../data/site';
+import { u } from '../../lib/url';
+const crumbs = [{ name: 'Umrah packages', href: '/umrah-packages/' }];
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Umrah packages',
+  itemListElement: packages.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(u(`/umrah-packages/${p.slug}/`), Astro.site).href, name: p.name })),
+}];
+---
+<Base title="Umrah packages from Kerala: compare durations, hotels and fares" description={`Compare ${packages.length} Umrah packages from Thiruvananthapuram and Kochi: premium short stay, family, value, Ramadan and land-only. Hotels near the Haram, visa and flights included.`} crumbs={crumbs} schema={schema}>
+  <PageHero title='Umrah packages <span class="accent">from Kerala</span>' lead="Every package covers your Umrah visa, hotels near the Haram, transfers and ziyarat. Choose by how long you can stay and how close you want to be." crumbs={crumbs} ar={arabic.umrah} />
+  <section class="section section--pattern">
+    <div class="container">
+      <div class="grid grid--3 reveal-stagger">{packages.map((p, i) => <PackageCard p={p} featured={i === 0} />)}</div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="head reveal"><Kicker ar={arabic.packages} text="Side by side" /><h2>Compare at a glance</h2></div>
+      <div style="overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line)" class="reveal">
+        <table class="compare">
+          <thead><tr><th scope="col">Package</th><th scope="col">Days</th><th scope="col">Makkah / Madinah</th><th scope="col">Hotels</th><th scope="col">Meals</th><th scope="col">Starts from</th></tr></thead>
+          <tbody>{packages.map((p) => <tr><th scope="row"><a href={u(`/umrah-packages/${p.slug}/`)}>{p.name}</a></th><td>{p.days}</td><td>{p.makkahNights} / {p.madinahNights} nights</td><td>{p.hotelClass}</td><td>{p.meals}</td><td>{p.startsFrom ? inr(p.startsFrom) : 'Ask us'}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <p style="margin-top:16px;color:var(--ink-soft);font-size:.9rem">Fares are per person and change with the season, room sharing and departure airport. We confirm your exact fare in writing before you pay. Questions? Call {site.phone}.</p>
+    </div>
+  </section>
+  <Enquiry />
+</Base>

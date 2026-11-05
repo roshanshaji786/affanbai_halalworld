@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+import { inr, type Package } from '../data/site';
+import { u } from '../lib/url';
+interface Props { p: Package; featured?: boolean }
+const { p, featured = false } = Astro.props;
+---
+<article class:list={['pkg', { 'pkg--featured': featured }]}>
+  {p.badge && <span class="pkg-badge">{p.badge}</span>}
+  <div class="pkg-days">{p.days}<small>days</small></div>
+  <h3><a href={u(`/umrah-packages/${p.slug}/`)}>{p.name}</a></h3>
+  <p>{p.short}</p>
+  <ul class="pkg-meta">
+    <li>{p.makkahNights} nights Makkah, {p.madinahNights} nights Madinah</li>
+    <li>{p.hotelClass} hotels, {p.distance.toLowerCase()}</li>
+    <li>{p.meals}</li>
+  </ul>
+  <div class="pkg-foot">
+    <div class="price">
+      {p.startsFrom ? <><small>Starts from</small><strong>{inr(p.startsFrom)}</strong></> : <><small>Fare</small><span class="ask">Ask for this month’s fare</span></>}
+    </div>
+    <span class="arrow" aria-hidden="true"><Icon name="arrow" /></span>
+  </div>
+</article>

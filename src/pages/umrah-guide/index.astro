@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { guides, arabic } from '../../data/site';
+import { u } from '../../lib/url';
+const crumbs = [{ name: 'Umrah guide', href: '/umrah-guide/' }];
+---
+<Base title="Umrah guide for pilgrims from Kerala" description="Free Umrah guides: how to perform Umrah step by step, and a packing and documents checklist for pilgrims travelling from India." crumbs={crumbs}>
+  <PageHero title='Umrah guide' lead="Simple, practical guides for first-time pilgrims and their families." crumbs={crumbs} ar={arabic.guide} />
+  <section class="section section--pattern">
+    <div class="container"><div class="grid grid--2 reveal-stagger">
+      {guides.map((g) => <a class="card" href={u(`/umrah-guide/${g.slug}/`)}><h2 style="font-size:1.9rem;margin:0">{g.title}</h2><p>{g.description}</p><span class="more">Read the guide →</span></a>)}
+      <a class="card" href={u('/umrah-visa/')}><h2 style="font-size:1.9rem;margin:0">Umrah visa from India</h2><p>Documents, timelines and how we file your Saudi Umrah e-visa.</p><span class="more">Visa details →</span></a>
+    </div></div>
+  </section>
+  <section class="section"><CtaBand /></section>
+</Base>

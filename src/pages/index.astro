@@ -1,0 +1,141 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Kicker from '../components/Kicker.astro';
+import PackageCard from '../components/PackageCard.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Enquiry from '../components/Enquiry.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, packages, inclusionInfo, faqs, guides, cities, arabic, type Inclusion } from '../data/site';
+import { u } from '../lib/url';
+
+const inclusions: Inclusion[] = ['visa', 'flights', 'hotels', 'meals', 'transfers', 'ziyarat'];
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+}, {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+}];
+---
+<Base
+  title="Umrah packages from Trivandrum and Kerala | Halal World"
+  description="Halal World is an Umrah travel agency in Thiruvananthapuram. Umrah packages from Trivandrum and Kochi with visa, flights, hotels near the Haram, meals, transfers and a Malayalam-speaking guide."
+  schema={schema}
+>
+  <Hero />
+
+  <section class="section section--pattern" id="packages" aria-labelledby="pk-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.packages} text="Umrah packages" />
+        <h2 id="pk-title">Choose the journey that <span class="accent">fits your family</span></h2>
+        <p class="lead">Every package includes the essentials. The difference is how long you stay, how close your hotel is and how you like to travel.</p>
+      </div>
+      <div class="grid grid--3 reveal-stagger">
+        {packages.map((p, i) => <PackageCard p={p} featured={i === 0} />)}
+        <a class="card" href={u('/umrah-packages/')} style="justify-content:center;background:transparent;border-style:dashed">
+          <h3>Need something different?</h3>
+          <p>Private family trips, Umrah with a Dubai or Istanbul stopover, or a group from your mahallu. We plan it around you.</p>
+          <span class="more">Compare all packages →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" aria-labelledby="inc-title">
+    <div class="container">
+      <div class="head head--center reveal">
+        <Kicker ar={arabic.services} text="What’s included" />
+        <h2 id="inc-title">You pray. <span class="accent">We handle the rest.</span></h2>
+        <p class="lead" style="margin-inline:auto">One team takes care of everything from your visa to the flight home, so nothing falls between agents.</p>
+      </div>
+      <div class="incl reveal-stagger">
+        {inclusions.map((k) => (
+          <div class="incl-item"><Icon name={k} /><h3>{inclusionInfo[k].title}</h3><p>{inclusionInfo[k].text}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.journey} text="How it works" />
+        <h2 id="how-title">From your first message <span class="accent">to Makkah</span></h2>
+      </div>
+      <ol class="steps reveal-stagger">
+        <li><h3>Tell us your plans</h3><p>Message us your month, who is travelling and your budget.</p></li>
+        <li><h3>Get a clear quote</h3><p>We send the hotels, dates and the full fare in writing. No hidden extras.</p></li>
+        <li><h3>Documents and visa</h3><p>Share your passport and photo. We check everything and file your Umrah visa.</p></li>
+        <li><h3>Briefing, then fly</h3><p>Join the pre-departure class, then travel with your guide and our team on call.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="why-title">
+    <div class="container split">
+      <div class="reveal">
+        <Kicker ar={arabic.trust} text="Why Halal World" />
+        <h2 id="why-title">A local team you can <span class="accent">sit down with</span></h2>
+        <p class="lead">We are based in Thiruvananthapuram, not a call centre in another state. You can visit us, meet your guide and ask every question before you pay.</p>
+        <ul class="why">
+          <li><Icon name="pin" /><div><h3>Hotels close to the Haram</h3><p>We tell you the walking distance before you book, not after you land.</p></div></li>
+          <li><Icon name="users" /><div><h3>Care for elders</h3><p>Wheelchairs on request, short walks, and a guide who checks on them every day.</p></div></li>
+          <li><Icon name="wallet" /><div><h3>One clear price</h3><p>Your fare is written down with what’s included and what isn’t. Pay in instalments with receipts.</p></div></li>
+          <li><Icon name="whatsapp" /><div><h3>Always reachable</h3><p>Our team is on WhatsApp throughout your journey, day and night.</p></div></li>
+        </ul>
+      </div>
+      <div class="frame reveal" aria-hidden="true">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a0e09"/><stop offset=".65" stop-color="#6b2617"/><stop offset="1" stop-color="#c9a45c"/></linearGradient>
+            <pattern id="star" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M20 3l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="none" stroke="#e2c27d" stroke-opacity=".12"/></pattern>
+          </defs>
+          <rect width="400" height="500" fill="url(#sky)"/>
+          <rect width="400" height="500" fill="url(#star)"/>
+          <circle cx="292" cy="120" r="34" fill="#ecd6a2" opacity=".9"/><circle cx="306" cy="112" r="30" fill="#3a1209"/>
+          <g fill="#1a0705">
+            <path d="M40 500V330h10v-40l6-16 6 16v40h10v170zM328 500V310h10v-50l7-18 7 18v50h10v192z"/>
+            <path d="M90 500V380c0-60 50-96 110-110 60 14 110 50 110 110v120z"/>
+            <path d="M200 262c-6-14-2-26 0-34 2 8 6 20 0 34z"/>
+            <rect x="0" y="470" width="400" height="30"/>
+          </g>
+          <g fill="#e2c27d" opacity=".75"><rect x="150" y="420" width="12" height="26" rx="6"/><rect x="194" y="410" width="12" height="36" rx="6"/><rect x="238" y="420" width="12" height="26" rx="6"/></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="gd-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.guide} text="Umrah guide" />
+        <h2 id="gd-title">Prepare with <span class="accent">a calm heart</span></h2>
+        <p class="lead">Free guides for first-time pilgrims. Read them, share them with your family, and bring your questions to us.</p>
+      </div>
+      <div class="grid grid--3 reveal-stagger">
+        {guides.map((g) => <a class="card" href={u(`/umrah-guide/${g.slug}/`)}><h3>{g.title}</h3><p>{g.description}</p><span class="more">Read the guide →</span></a>)}
+        <a class="card" href={u('/umrah-visa/')}><h3>Umrah visa from India</h3><p>Documents, timelines and how we file your Saudi Umrah e-visa.</p><span class="more">Visa details →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.questions} text="Questions" />
+        <h2 id="faq-title">Questions pilgrims <span class="accent">ask us most</span></h2>
+      </div>
+      <Faq items={faqs} />
+      <p style="margin-top:28px;color:var(--ink-soft)">Umrah from your town: {cities.map((c, i) => <>{i > 0 && ' · '}<a href={u(`/umrah-packages-from-${c.slug}/`)}>Umrah packages from {c.name}</a></>)}</p>
+    </div>
+  </section>
+
+  <section class="section"><CtaBand /></section>
+  <Enquiry />
+</Base>

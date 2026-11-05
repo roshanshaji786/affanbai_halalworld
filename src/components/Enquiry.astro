@@ -1,0 +1,51 @@
+---
+import Icon from './Icon.astro';
+import Kicker from './Kicker.astro';
+import { site, packages, arabic, waLink } from '../data/site';
+interface Props { preset?: string; from?: string; title?: string }
+const { preset, from, title = 'Tell us your dates. We will send a plan and a fare.' } = Astro.props;
+const months = Array.from({ length: 12 }, (_, i) => {
+  const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + i);
+  return d.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+});
+---
+<section class="section section--dark" id="enquire" aria-labelledby="enq-title">
+  <div class="container enquiry">
+    <div>
+      <Kicker ar={arabic.contact} text="Enquire" />
+      <h2 id="enq-title">{title}</h2>
+      <p class="lead">Fill this in and it opens WhatsApp with your details ready to send. We usually reply within a few hours.</p>
+      <ul class="contact-list">
+        <li><a href={waLink()} target="_blank" rel="noopener" data-wa="enquiry-side"><Icon name="whatsapp" /><div><small>WhatsApp</small><span>{site.phone}</span></div></a></li>
+        <li><a href={`tel:${site.phoneE164}`}><Icon name="phone" /><div><small>Call</small><span>{site.phone}</span></div></a></li>
+        <li><a href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="pin" /><div><small>Visit</small><span>{site.address.locality}, {site.address.region}</span></div></a></li>
+        <li><div><Icon name="clock" /><div><small>Hours</small><span>{site.hoursText}</span></div></div></li>
+      </ul>
+    </div>
+    <form class="form" data-enquiry data-wa={site.whatsapp}>
+      <label class="field field--full">Your name<input name="name" autocomplete="name" placeholder="Full name" required /></label>
+      <label class="field field--full">Package
+        <select name="package">
+          {packages.map((p) => <option selected={p.slug === preset}>{p.name}</option>)}
+          <option>Not sure yet, please suggest</option>
+        </select>
+      </label>
+      <div class="form-row">
+        <label class="field">Travel month
+          <select name="month" data-months>{months.map((m) => <option>{m}</option>)}<option>Flexible</option></select>
+        </label>
+        <label class="field">Flying from
+          <select name="from">{site.airports.map((a) => <option selected={a.code === from}>{a.code}, {a.name.replace(' International Airport', '')}</option>)}<option>Already in the Gulf</option></select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label class="field">Adults<input name="adults" type="number" inputmode="numeric" min="1" max="60" value="2" /></label>
+        <label class="field">Children<input name="children" type="number" inputmode="numeric" min="0" max="30" value="0" /></label>
+      </div>
+      <label class="field field--full">Elders who need wheelchair help<input name="elders" type="number" inputmode="numeric" min="0" max="20" value="0" /></label>
+      <label class="field field--full">Anything else<textarea name="note" rows="3" placeholder="Room preference, dates, questions"></textarea></label>
+      <button class="btn btn--wa btn--block" type="submit"><Icon name="whatsapp" />Send on WhatsApp</button>
+      <p class="form-note">Nothing is stored on this website. Your message goes straight to our WhatsApp.</p>
+    </form>
+  </div>
+</section>
