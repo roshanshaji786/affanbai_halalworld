@@ -1,0 +1,9 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../data/site';
+---
+<Legal title="Privacy policy" description={`How ${site.name} handles your personal information.`} path="/privacy/">
+  <h2>What we collect</h2><p>This website does not store any form data. The enquiry form opens WhatsApp with your message, and you choose whether to send it. When you book, we collect the passport and contact details needed for your visa, flights and hotels.</p>
+  <h2>How we use it</h2><p>We use your details only to arrange your travel and to contact you about your booking. We share them only with airlines, hotels and the Saudi visa system as needed for your trip.</p>
+  <h2>Your choices</h2><p>You can ask us to delete your details once your trip is complete. Contact us at {site.email} or {site.phone}.</p>
+</Legal>

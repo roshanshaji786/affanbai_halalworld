@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Departure from '../components/Departure.astro';
+import Kicker from '../components/Kicker.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Enquiry from '../components/Enquiry.astro';
+import talbiyah from '../data/talbiyah.json';
+import { site, umrahWays, services, faqs, cities, arabic } from '../data/site';
+import { u } from '../lib/url';
+
+const homeFaqs = [faqs[4], faqs[5], faqs[0], faqs[3]];
+const wayHref: Record<string, string> = { 'tailor-made': '/tailor-made-umrah/', 'group-departures': '/group-umrah/' };
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: homeFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+}, {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+}];
+---
+<Base
+  title="Halal World | Travel consultancy for Umrah, Trivandrum"
+  description="Halal World is a travel consultancy in Thiruvananthapuram. Tailor-made Umrah on your dates and hotel distance, group Umrah with an Ameer every March, July and November, plus flights, visas and hotels worldwide."
+  schema={schema}
+>
+  <Hero />
+
+  <section class="section section--tight" id="departure" aria-label="Next group departure">
+    <div class="container"><Departure /></div>
+  </section>
+
+  <section class="section" aria-labelledby="umrah-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.umrah} text="Umrah" />
+        <svg class="talbiyah" viewBox={talbiyah.viewBox} role="img" aria-label={`${talbiyah.text} (Labbayk Allahumma Labbayk)`} lang="ar"><path d={talbiyah.d} /></svg>
+        <h2 id="umrah-title">Two ways to go. <span class="accent">Both planned by us.</span></h2>
+        <p class="lead">Most of our pilgrims choose a tailor-made Umrah. If you would rather travel with others and a guide, join one of our three group departures a year.</p>
+      </div>
+      <div class="ways">
+        {umrahWays.map((w, i) => (
+          <article class:list={['way', 'reveal', { 'way--primary': i === 0 }]}>
+            <span class="way-kicker">{w.kicker}</span>
+            <h3>{w.name}</h3>
+            <p>{w.short}</p>
+            <ul class="ticks">{w.points.slice(0, 4).map((p) => <li><Icon name="check" /><span>{p}</span></li>)}</ul>
+            <a class="link" href={u(wayHref[w.slug])}>{i === 0 ? 'How tailor-made works' : 'Group dates and details'} <Icon name="arrow" /></a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="svc-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.services} text="Beyond Umrah" />
+        <h2 id="svc-title">Every other trip, <span class="accent">same consultant.</span></h2>
+        <p class="lead">The people who plan your Umrah also book your work trips, family visits and holidays.</p>
+      </div>
+      <div class="services reveal">
+        {services.map((s) => <div class="service"><Icon name={s.icon} /><div><h3>{s.title}</h3><p>{s.text}</p></div></div>)}
+      </div>
+      <p style="margin-top:24px"><a class="link" href={u('/travel-services/')}>All travel services <Icon name="arrow" /></a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="container">
+      <div class="head reveal">
+        <Kicker ar={arabic.journey} text="How we work" />
+        <h2 id="how-title">A conversation first, <span class="accent">then a plan.</span></h2>
+      </div>
+      <ol class="steps reveal">
+        <li><h3>Talk to us</h3><p>On WhatsApp, by phone or at our office. Tell us who is travelling and what matters.</p></li>
+        <li><h3>Get a written plan</h3><p>Dates, flights, hotels with their distance, and the full fare. No hidden extras.</p></li>
+        <li><h3>We handle the paperwork</h3><p>Visa, tickets and vouchers, checked twice before anything is filed.</p></li>
+        <li><h3>Travel, with us on call</h3><p>We stay on WhatsApp from departure until you are home.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="faq-title">
+    <div class="container split">
+      <div class="reveal">
+        <Kicker ar={arabic.questions} text="Questions" />
+        <h2 id="faq-title">Good to know</h2>
+        <p class="muted small">Umrah from your town: {cities.map((c, i) => <>{i > 0 && ' · '}<a href={u(`/umrah-packages-from-${c.slug}/`)}>{c.name}</a></>)}</p>
+      </div>
+      <Faq items={homeFaqs} />
+    </div>
+  </section>
+
+  <Enquiry />
+</Base>

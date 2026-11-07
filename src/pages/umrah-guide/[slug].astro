@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { guides, site, type Guide } from '../../data/site';
+import { u } from '../../lib/url';
+export function getStaticPaths() { return guides.map((g) => ({ params: { slug: g.slug }, props: { g } })); }
+const { g } = Astro.props as { g: Guide };
+const crumbs = [{ name: 'Umrah guide', href: '/umrah-guide/' }, { name: g.title, href: `/umrah-guide/${g.slug}/` }];
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: g.title,
+  description: g.description,
+  author: { '@type': 'Organization', name: site.name },
+  publisher: { '@id': `${site.url}/#agency` },
+  mainEntityOfPage: new URL(u(`/umrah-guide/${g.slug}/`), Astro.site).href,
+  image: new URL(u('/og.jpg'), Astro.site).href,
+}];
+const others = guides.filter((o) => o.slug !== g.slug);
+---
+<Base title={g.title} description={g.description} crumbs={crumbs} schema={schema} ogType="article">
+  <PageHero title={g.title} lead={g.description} crumbs={crumbs} />
+  <section class="section">
+    <div class="container"><article class="prose">
+      {g.sections.map((s) => <>
+        <h2>{s.heading}</h2>
+        {s.body.map((b) => <p>{b}</p>)}
+        {s.list && <ul>{s.list.map((l) => <li>{l}</li>)}</ul>}
+      </>)}
+      <p class="note">This guide is a practical summary. For detailed rulings, ask a scholar you trust. Our Ameer and guides walk groups through every step on the journey.</p>
+      {others.length > 0 && <p>Next: {others.map((o) => <a href={u(`/umrah-guide/${o.slug}/`)}>{o.title}</a>)}</p>}
+    </article></div>
+  </section>
+  <section class="section section--tint"><CtaBand /></section>
+</Base>

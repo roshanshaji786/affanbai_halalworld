@@ -1,0 +1,51 @@
+---
+// Highlight for the next fixed group departure. Computed at build time, then refreshed in the browser
+// so the strip never shows a month that has already passed, even if the site has not been rebuilt.
+import Icon from './Icon.astro';
+import { groupDepartures, nextDepartures, waLink } from '../data/site';
+import { u } from '../lib/url';
+const [next, ...later] = nextDepartures(3);
+const fmt = (iso: string) => new Date(iso + 'T00:00:00').toLocaleString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+const when = next.date ? fmt(next.date) : next.label;
+---
+<div class="departure reveal" data-departure data-months={groupDepartures.months.join(',')} data-confirmed={JSON.stringify(groupDepartures.confirmed)}>
+  <div class="departure-main">
+    <span class="departure-tag">Next group departure</span>
+    <span class="departure-when" data-when>{when}</span>
+    <span class="departure-meta">Group Umrah with an Ameer · about {groupDepartures.days} days · {next.note ?? 'Seats open now'}</span>
+  </div>
+  <ul class="departure-next" aria-label="Following departures" data-later>
+    {later.map((d) => <li>Then {d.label}</li>)}
+  </ul>
+  <div class="departure-actions">
+    <a class="btn btn--accent" href={waLink(`Assalamu alaikum, I would like to reserve a seat on the ${next.label} group Umrah.`)} target="_blank" rel="noopener" data-wa="departure" data-reserve><Icon name="whatsapp" />Reserve a seat</a>
+    <a class="btn btn--line" href={u('/group-umrah/')}>How groups work</a>
+  </div>
+</div>
+<script>
+  const el = document.querySelector<HTMLElement>('[data-departure]');
+  if (el) {
+    const months = (el.dataset.months ?? '').split(',').map(Number);
+    const confirmed = JSON.parse(el.dataset.confirmed || '{}') as Record<string, { date?: string }>;
+    const now = new Date();
+    const out: { label: string; date?: string }[] = [];
+    let y = now.getFullYear(), m = now.getMonth() + 1;
+    for (let g = 0; out.length < 3 && g < 48; g++) {
+      if (months.includes(m)) {
+        const c = confirmed[`${y}-${String(m).padStart(2, '0')}`] ?? {};
+        const current = y === now.getFullYear() && m === now.getMonth() + 1;
+        if (c.date ? new Date(c.date + 'T23:59:59') >= now : !current) out.push({ label: new Date(y, m - 1, 1).toLocaleString('en-IN', { month: 'long', year: 'numeric' }), date: c.date });
+      }
+      if (++m > 12) { m = 1; y++; }
+    }
+    const [n, ...rest] = out;
+    const when = el.querySelector('[data-when]');
+    const text = n.date ? new Date(n.date + 'T00:00:00').toLocaleString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : n.label;
+    if (when && when.textContent !== text) {
+      when.textContent = text;
+      el.querySelector('[data-later]')?.replaceChildren(...rest.map((d) => Object.assign(document.createElement('li'), { textContent: `Then ${d.label}` })));
+      const a = el.querySelector<HTMLAnchorElement>('[data-reserve]');
+      if (a) a.href = a.href.replace(/text=.*/, 'text=' + encodeURIComponent(`Assalamu alaikum, I would like to reserve a seat on the ${n.label} group Umrah.`));
+    }
+  }
+</script>

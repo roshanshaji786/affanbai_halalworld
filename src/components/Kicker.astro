@@ -1,0 +1,5 @@
+---
+interface Props { ar?: string; text: string }
+const { ar, text } = Astro.props;
+---
+<span class="label">{ar && <span class="ar" lang="ar" dir="rtl">{ar}</span>}{text}</span>

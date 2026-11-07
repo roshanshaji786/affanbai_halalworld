@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Departure from '../components/Departure.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Enquiry from '../components/Enquiry.astro';
+import { cities, faqs, umrahWays, site, waLink, type City } from '../data/site';
+import { u } from '../lib/url';
+
+export function getStaticPaths() {
+  return cities.map((c) => ({ params: { city: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: City };
+const label = c.altName ? `${c.name} (${c.altName})` : c.name;
+const crumbs = [{ name: `Umrah from ${c.name}`, href: `/umrah-packages-from-${c.slug}/` }];
+const allFaqs = [...c.faqs, faqs[4], faqs[5]];
+const wayHref = ['/tailor-made-umrah/', '/group-umrah/'];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: allFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `Umrah packages from ${c.name}`,
+    serviceType: 'Umrah travel planning',
+    provider: { '@id': `${site.url}/#agency` },
+    areaServed: [c.name, ...c.nearby].map((n) => ({ '@type': 'Place', name: n })),
+    url: new URL(u(`/umrah-packages-from-${c.slug}/`), Astro.site).href,
+  },
+];
+const others = cities.filter((o) => o.slug !== c.slug);
+---
+<Base title={`Umrah packages from ${label}`} description={`Tailor-made Umrah and group Umrah with an Ameer from ${label}, flying from ${c.airportCode}. Serving ${c.nearby.slice(0, 5).join(', ')} and nearby. Call ${site.phone}.`} crumbs={crumbs} schema={schema}>
+  <PageHero label={`Umrah from ${c.name}`} title={`Umrah from <span class="accent">${c.name}</span>`} lead={c.intro} crumbs={crumbs}>
+    <ul class="facts">
+      <li><b>{c.airportCode}</b>{c.airport.replace(' International Airport', '')} airport</li>
+      <li><b>Your dates</b>Tailor-made</li>
+      <li><b>Mar · Jul · Nov</b>Group departures</li>
+    </ul>
+    <div class="hero-ctas"><a class="btn btn--accent" href={waLink(`Assalamu alaikum, I am from ${c.name} and would like to plan an Umrah.`)} target="_blank" rel="noopener" data-wa={`city-${c.slug}`}><Icon name="whatsapp" />Plan my Umrah</a></div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><h2>Two ways to go from {c.name}</h2><p class="lead">{c.why}</p></div>
+      <div class="ways">
+        {umrahWays.map((w, i) => (
+          <article class:list={['way', { 'way--primary': i === 0 }]}>
+            <span class="way-kicker">{w.kicker}</span>
+            <h3>{w.name}</h3>
+            <p>{w.short}</p>
+            <a class="link" href={u(wayHref[i])}>Details <Icon name="arrow" /></a>
+          </article>
+        ))}
+      </div>
+      <div style="margin-top:20px"><Departure /></div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div class="prose">
+        <h2>From {c.airportCode} to the holy cities</h2>
+        <p>{c.airportNote}</p>
+        <p>Flights from {c.airport} usually connect through a Gulf hub to Jeddah (JED) or Madinah (MED). We choose the routing with the shortest total journey for your dates and confirm the timings before you pay.</p>
+      </div>
+      <div>
+        <h3>Areas we serve near {c.name}</h3>
+        <ul class="chips">{c.nearby.map((n) => <li>{n}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div><h2>Questions from {c.name}</h2><p class="muted small">Also: {others.map((o, i) => <>{i > 0 && ' · '}<a href={u(`/umrah-packages-from-${o.slug}/`)}>Umrah from {o.name}</a></>)}</p></div>
+      <Faq items={allFaqs} />
+    </div>
+  </section>
+  <Enquiry title={`Plan your Umrah from ${c.name}.`} />
+</Base>

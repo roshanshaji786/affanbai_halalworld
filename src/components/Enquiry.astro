@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import Kicker from './Kicker.astro';
+import { site, arabic, tailorOptions, waLink } from '../data/site';
+interface Props { preset?: string; title?: string }
+const { preset = 'Tailor-made Umrah', title = 'Tell us what you have in mind.' } = Astro.props;
+const trips = ['Tailor-made Umrah', 'Group Umrah with an Ameer', 'Flight tickets', 'Visa', 'Hotel or holiday', 'Something else'];
+const months = Array.from({ length: 12 }, (_, i) => {
+  const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + i);
+  return d.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+});
+---
+<section class="section section--tint" id="enquire" aria-labelledby="enq-title">
+  <div class="container enquiry">
+    <div>
+      <Kicker ar={arabic.contact} text="Enquire" />
+      <h2 id="enq-title">{title}</h2>
+      <p class="lead">This opens WhatsApp with your details ready to send. A consultant replies, usually within a few hours.</p>
+      <ul class="contact-list">
+        <li><a href={waLink()} target="_blank" rel="noopener" data-wa="enquiry-side"><Icon name="whatsapp" /><small>WhatsApp</small><span>{site.phone}</span></a></li>
+        <li><a href={`tel:${site.phoneE164}`}><Icon name="phone" /><small>Call</small><span>{site.phone}</span></a></li>
+        <li><a href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="pin" /><small>Visit</small><span>{site.address.locality}</span></a></li>
+        <li><div><Icon name="clock" /><small>Hours</small><span>{site.hoursText}</span></div></li>
+      </ul>
+    </div>
+    <form class="form" data-enquiry data-wa={site.whatsapp}>
+      <label class="field field--full">Your name<input name="name" autocomplete="name" placeholder="Full name" required /></label>
+      <label class="field field--full">What do you need?
+        <select name="trip" data-trip>{trips.map((t) => <option selected={t === preset}>{t}</option>)}</select>
+      </label>
+      <div class="form-row">
+        <label class="field">Month
+          <select name="month" data-months>{months.map((m) => <option>{m}</option>)}<option>Flexible</option></select>
+        </label>
+        <label class="field">Travellers<input name="people" type="number" inputmode="numeric" min="1" max="60" value="2" /></label>
+      </div>
+      <div class="form-row" data-umrah-only>
+        <label class="field">Days
+          <select name="days">{tailorOptions.days.map((d) => <option>{d}</option>)}</select>
+        </label>
+        <label class="field">Hotel distance
+          <select name="distance">{tailorOptions.distance.map((d) => <option>{d}</option>)}</select>
+        </label>
+      </div>
+      <label class="field field--full">Anything else<textarea name="note" rows="3" placeholder="Elders travelling, room sharing, destination, questions"></textarea></label>
+      <button class="btn btn--wa btn--block" type="submit"><Icon name="whatsapp" />Send on WhatsApp</button>
+      <p class="form-note">Nothing is stored on this website. Your message goes straight to our WhatsApp.</p>
+    </form>
+  </div>
+</section>

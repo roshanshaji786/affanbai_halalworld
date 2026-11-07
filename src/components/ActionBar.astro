@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+import { site, waLink } from '../data/site';
+---
+<div class="action-bar" data-action-bar>
+  <a class="btn call" href={`tel:${site.phoneE164}`} aria-label={`Call ${site.phone}`}><Icon name="phone" /></a>
+  <a class="btn btn--wa" href={waLink()} target="_blank" rel="noopener" data-wa="bar"><Icon name="whatsapp" />Talk to a consultant</a>
+</div>

@@ -1,0 +1,44 @@
+---
+import Logo from './Logo.astro';
+import { site, cities } from '../data/site';
+import { nav } from '../data/nav';
+import { u } from '../lib/url';
+const regs = site.registrations.filter((r) => r.value);
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href={u('/')}><Logo /></a>
+        <p>A travel consultancy in Thiruvananthapuram. Umrah planned around you, and flights, visas and hotels for every other journey.</p>
+        {regs.length > 0 && <div class="regs">{regs.map((r) => <span>{r.label}: {r.value}</span>)}</div>}
+      </div>
+      <div>
+        <h2>Halal World</h2>
+        <ul>{nav.map((n) => <li><a href={u(n.href)}>{n.label}</a></li>)}</ul>
+      </div>
+      <div>
+        <h2>Umrah</h2>
+        <ul>
+          {cities.map((c) => <li><a href={u(`/umrah-packages-from-${c.slug}/`)}>Umrah from {c.name}</a></li>)}
+          <li><a href={u('/umrah-visa/')}>Umrah visa</a></li>
+          <li><a href={u('/umrah-guide/')}>Umrah guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><a href={`tel:${site.phoneE164}`}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{[site.address.street, site.address.locality, site.address.region].filter(Boolean).join(', ')}</li>
+          <li>{site.hoursText}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {site.name}. All rights reserved.</span>
+      <span><a href={u('/privacy/')}>Privacy</a> · <a href={u('/terms/')}>Terms</a> · <a href={u('/cancellation-policy/')}>Cancellation policy</a></span>
+    </div>
+  </div>
+</footer>

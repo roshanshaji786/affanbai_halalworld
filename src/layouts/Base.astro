@@ -1,0 +1,108 @@
+---
+import '../styles/global.css';
+import fontDisplay from '../assets/fonts/cormorant-600.woff2?url';
+import fontBody from '../assets/fonts/manrope-var.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ActionBar from '../components/ActionBar.astro';
+import { site } from '../data/site';
+import { u } from '../lib/url';
+
+export interface Crumb { name: string; href: string }
+interface Props {
+  title: string;
+  description: string;
+  crumbs?: Crumb[];
+  schema?: Record<string, unknown>[];
+  ogType?: string;
+  noindex?: boolean;
+}
+const { title, description, crumbs = [], schema = [], ogType = 'website', noindex = false } = Astro.props;
+const preview = !!import.meta.env.PUBLIC_PREVIEW; // preview hosting must not be indexed
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(u('/og.jpg'), Astro.site).href;
+const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
+const abs = (p: string) => new URL(u(p), Astro.site).href;
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'TravelAgency',
+  '@id': `${site.url}/#agency`,
+  name: site.name,
+  legalName: site.legalName,
+  slogan: site.tagline,
+  url: abs('/'),
+  logo: abs('/logo.png'),
+  image: ogImage,
+  telephone: site.phoneE164,
+  email: site.email,
+  priceRange: '₹₹',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  hasMap: site.mapsUrl,
+  openingHoursSpecification: site.hours.map((h) => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: h.days, opens: h.opens, closes: h.closes })),
+  areaServed: ['Thiruvananthapuram', 'Kollam', 'Kochi', 'Kerala'].map((n) => ({ '@type': 'Place', name: n })),
+  knowsLanguage: ['ml', 'en', 'ar'],
+  sameAs: Object.values(site.social).filter(Boolean),
+};
+const ld: Record<string, unknown>[] = [org, ...schema];
+if (crumbs.length) {
+  ld.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: abs(c.href) })),
+  });
+}
+---
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {(noindex || preview) && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#fcfbf8" />
+    <meta name="geo.region" content="IN-KL" />
+    <meta name="geo.placename" content={site.address.locality} />
+    <meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={u('/apple-touch-icon.png')} />
+    <link rel="manifest" href={u('/site.webmanifest')} />
+    <link rel="sitemap" href={u('/sitemap-index.xml')} />
+    <link rel="preload" href={fontDisplay} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fontBody} as="font" type="font/woff2" crossorigin />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    {ld.map((o) => <script type="application/ld+json" set:html={JSON.stringify(o)} />)}
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <ActionBar />
+    <script>
+      import '../scripts/ui';
+    </script>
+  </body>
+</html>

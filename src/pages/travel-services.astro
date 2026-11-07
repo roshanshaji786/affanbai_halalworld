@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import Enquiry from '../components/Enquiry.astro';
+import { services, site } from '../data/site';
+import { u } from '../lib/url';
+const crumbs = [{ name: 'Travel services', href: '/travel-services/' }];
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: services.map((s, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'Service', name: s.title, description: s.text, provider: { '@id': `${site.url}/#agency` } } })),
+}];
+---
+<Base title="Flights, visas and hotels from Trivandrum" description="International and domestic flight tickets, visa assistance, hotels worldwide, transfers and sightseeing, booked by a travel consultant in Thiruvananthapuram." crumbs={crumbs} schema={schema}>
+  <PageHero label="Beyond Umrah" title='Travel services, <span class="accent">one consultant</span>' lead="Umrah is our main work, but not our only work. We book trips of every kind for families and businesses across Kerala." crumbs={crumbs} />
+  <section class="section">
+    <div class="container">
+      <div class="services">
+        {services.map((s) => <div class="service"><Icon name={s.icon} /><div><h3>{s.title}</h3><p>{s.text}</p></div></div>)}
+      </div>
+      <p class="note" style="margin-top:32px">Planning Umrah? See <a href={u('/tailor-made-umrah/')}>tailor-made Umrah</a> or our <a href={u('/group-umrah/')}>group departures</a>.</p>
+    </div>
+  </section>
+  <Enquiry preset="Flight tickets" title="Where are you going?" />
+</Base>
