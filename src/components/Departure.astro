@@ -18,8 +18,8 @@ const when = next.date ? fmt(next.date) : next.label;
     {later.map((d) => <li>Then {d.label}</li>)}
   </ul>
   <div class="departure-actions">
-    <a class="btn btn--accent" href={waLink(`Assalamu alaikum, I would like to reserve a seat on the ${next.label} group Umrah.`)} target="_blank" rel="noopener" data-wa="departure" data-reserve><Icon name="whatsapp" />Reserve a seat</a>
-    <a class="btn btn--line" href={u('/group-umrah/')}>How groups work</a>
+    <a class="btn btn--gold" href={waLink(`Assalamu alaikum, I would like to reserve a seat on the ${next.label} group Umrah.`)} target="_blank" rel="noopener" data-wa="departure" data-reserve><Icon name="whatsapp" />Reserve a seat</a>
+    <a class="btn btn--ghost" href={u('/group-umrah/')}>How groups work</a>
   </div>
 </div>
 <script>

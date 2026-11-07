@@ -8,7 +8,7 @@ const { title, lead, crumbs = [], label } = Astro.props;
     {crumbs.length > 0 && (
       <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href={u('/')}>Home</a></li>{crumbs.map((c, i) => <li>{i === crumbs.length - 1 ? <span aria-current="page">{c.name}</span> : <a href={u(c.href)}>{c.name}</a>}</li>)}</ol></nav>
     )}
-    {label && <span class="label">{label}</span>}
+    {label && <span class="kicker">{label}</span>}
     <h1 set:html={title} />
     {lead && <p class="lead">{lead}</p>}
     <slot />

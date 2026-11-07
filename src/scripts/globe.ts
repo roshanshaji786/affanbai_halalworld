@@ -1,9 +1,10 @@
 /**
- * Hero globe (light theme): a paper-white dotted earth with fine maroon flight arcs from Kerala
- * to the holy cities and beyond.
+ * Hero globe: dotted earth, gold flight arcs from Kerala to the holy cities and beyond.
  * Loaded lazily (after first paint) and only on capable devices. Tree-shaken three.js imports keep it small.
  */
 import {
+  AdditiveBlending,
+  BackSide,
   BufferAttribute,
   BufferGeometry,
   CatmullRomCurve3,
@@ -39,8 +40,9 @@ const DESTS: (City & { from: number; h?: number })[] = [
   { name: 'Baku', lat: 40.41, lon: 49.87, from: 0 },
 ];
 
-const ACCENT = new Color('#6e2416');
-const INK = new Color('#4a453f');
+const GOLD = new Color('#e2c27d');
+const GOLD_DEEP = new Color('#c9a45c');
+const IVORY = new Color('#f3e6cf');
 
 export function vec(lat: number, lon: number, r = 1) {
   const phi = ((90 - lat) * Math.PI) / 180;
@@ -77,17 +79,33 @@ export function mount(host: HTMLElement) {
 
   const uniforms = { uTime: { value: 0 }, uPixelRatio: { value: renderer.getPixelRatio() } };
 
-  // Body of the globe: a soft paper sphere with a faint rim so it reads on a light page.
+  // Body of the globe: dark sphere with a warm inner rim.
   const body = new Mesh(
     new SphereGeometry(0.995, 64, 48),
     new ShaderMaterial({
+      uniforms: { uRim: { value: GOLD_DEEP } },
       vertexShader: `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
-      fragmentShader: `varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - max(dot(vN, vV), 0.), 2.2); vec3 base = mix(vec3(0.925,0.91,0.88), vec3(0.975,0.968,0.952), vN.y*.5+.5); gl_FragColor = vec4(mix(base, vec3(0.83,0.8,0.75), f*0.8), 1.); }`,
+      fragmentShader: `uniform vec3 uRim; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - max(dot(vN, vV), 0.), 2.6); vec3 base = mix(vec3(0.09,0.03,0.02), vec3(0.18,0.06,0.04), vN.y*.5+.5); gl_FragColor = vec4(base + uRim*f*0.55, 1.); }`,
     }),
   );
   globe.add(body);
 
-  // Land dots. Dots near the routes turn maroon; the rest are soft ink.
+  // Atmosphere halo
+  const halo = new Mesh(
+    new SphereGeometry(1.22, 64, 48),
+    new ShaderMaterial({
+      uniforms: { uColor: { value: GOLD } },
+      vertexShader: `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
+      fragmentShader: `uniform vec3 uColor; varying vec3 vN; varying vec3 vV; void main(){ float d = dot(vN, vV); float i = pow(clamp(0.62 + d, 0., 1.), 5.0); gl_FragColor = vec4(uColor, i*0.55); }`,
+      side: BackSide,
+      blending: AdditiveBlending,
+      transparent: true,
+      depthWrite: false,
+    }),
+  );
+  world.add(halo);
+
+  // Land dots. Dots near the routes glow gold; the rest are soft ivory.
   const n = LAND.length / 2;
   const pos = new Float32Array(n * 3);
   const col = new Float32Array(n * 3);
@@ -99,7 +117,7 @@ export function mount(host: HTMLElement) {
     pos.set([v.x, v.y, v.z], i * 3);
     let near = 0;
     for (const h of hot) near = Math.max(near, 1 - Math.min(v.distanceTo(h) / 0.35, 1));
-    tmp.copy(INK).lerp(ACCENT, Math.min(1, near * 1.4));
+    tmp.copy(IVORY).lerp(GOLD, Math.min(1, near * 1.4));
     col.set([tmp.r, tmp.g, tmp.b], i * 3);
     rnd[i] = Math.random();
   }
@@ -113,8 +131,8 @@ export function mount(host: HTMLElement) {
       uniforms,
       vertexShader: `uniform float uTime; uniform float uPixelRatio; attribute vec3 color; attribute float aRnd; varying vec3 vC; varying float vA;
         void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vec3 n = normalize((modelViewMatrix*vec4(position,0.)).xyz);
-          float facing = smoothstep(-0.05, 0.45, n.z); vC = color; vA = facing*(0.42 + 0.18*sin(uTime*1.3 + aRnd*40.));
-          gl_PointSize = (2.2 + aRnd*1.0) * uPixelRatio * (4.4 / -mv.z); gl_Position = projectionMatrix*mv; }`,
+          float facing = smoothstep(-0.05, 0.45, n.z); vC = color; vA = facing*(0.55 + 0.45*sin(uTime*1.3 + aRnd*40.));
+          gl_PointSize = (2.6 + aRnd*1.4) * uPixelRatio * (4.4 / -mv.z); gl_Position = projectionMatrix*mv; }`,
       fragmentShader: `varying vec3 vC; varying float vA; void main(){ float d = length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor = vec4(vC, vA*smoothstep(.5,.1,d)); }`,
       transparent: true,
       depthWrite: false,
@@ -125,14 +143,15 @@ export function mount(host: HTMLElement) {
   // Flight arcs with a travelling comet of light.
   const arcMat = (offset: number, speed: number) =>
     new ShaderMaterial({
-      uniforms: { uTime: uniforms.uTime, uOff: { value: offset }, uSpeed: { value: speed }, uColor: { value: ACCENT } },
+      uniforms: { uTime: uniforms.uTime, uOff: { value: offset }, uSpeed: { value: speed }, uColor: { value: GOLD } },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
       fragmentShader: `uniform float uTime; uniform float uOff; uniform float uSpeed; uniform vec3 uColor; varying vec2 vUv;
         void main(){ float head = fract(uTime*uSpeed + uOff); float x = vUv.x; float tail = smoothstep(head-0.28, head, x) * step(x, head);
-          float base = 0.5; float a = base + tail*0.5; vec3 c = mix(uColor, vec3(.66,.52,.25), tail*tail*.6);
+          float base = 0.16; float a = base + tail*0.95; vec3 c = mix(uColor, vec3(1.,.97,.9), tail*tail);
           float edge = smoothstep(0., .04, x)*smoothstep(1., .96, x); gl_FragColor = vec4(c, a*edge); }`,
       transparent: true,
       depthWrite: false,
+      blending: AdditiveBlending,
     });
 
   DESTS.forEach((d, i) => {
@@ -147,21 +166,22 @@ export function mount(host: HTMLElement) {
       p.multiplyScalar(1 + Math.sin(Math.PI * t) * lift);
       pts.push(p);
     }
-    const tube = new TubeGeometry(new CatmullRomCurve3(pts), 80, mobile ? 0.0065 : 0.0055, 6, false);
-    globe.add(new Mesh(tube, arcMat(i * 0.17, 0.14 + (i % 3) * 0.03)));
+    const tube = new TubeGeometry(new CatmullRomCurve3(pts), 80, mobile ? 0.0055 : 0.0045, 6, false);
+    globe.add(new Mesh(tube, arcMat(i * 0.17, 0.16 + (i % 3) * 0.03)));
   });
 
   // City markers: pulsing rings, brighter at the Kerala origins.
   const ringMat = (strength: number, phase: number) =>
     new ShaderMaterial({
-      uniforms: { uTime: uniforms.uTime, uS: { value: strength }, uP: { value: phase }, uColor: { value: ACCENT } },
+      uniforms: { uTime: uniforms.uTime, uS: { value: strength }, uP: { value: phase }, uColor: { value: GOLD } },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
       fragmentShader: `uniform float uTime; uniform float uS; uniform float uP; uniform vec3 uColor; varying vec2 vUv;
         void main(){ vec2 p = vUv-.5; float r = length(p)*2.; float t = fract(uTime*.55 + uP);
           float ring = smoothstep(.09,0.,abs(r - t))*(1.-t); float core = smoothstep(.22,.0,r);
-          float a = (ring*0.9 + core)*uS; if(a<.01) discard; gl_FragColor = vec4(uColor, a); }`,
+          float a = (ring*0.9 + core)*uS; if(a<.01) discard; gl_FragColor = vec4(mix(uColor, vec3(1.), core*.6), a); }`,
       transparent: true,
       depthWrite: false,
+      blending: AdditiveBlending,
     });
   const quad = new BufferGeometry();
   quad.setAttribute('position', new BufferAttribute(new Float32Array([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0]), 3));
@@ -184,6 +204,35 @@ export function mount(host: HTMLElement) {
       labelled.push({ el, v });
     }
   });
+
+  // Floating gold motes around the globe
+  const motes = 220;
+  const mp = new Float32Array(motes * 3);
+  const mr = new Float32Array(motes);
+  for (let i = 0; i < motes; i++) {
+    const r = 1.35 + Math.random() * 1.4;
+    const t = Math.random() * Math.PI * 2;
+    const y = (Math.random() - 0.5) * 2.6;
+    mp.set([Math.cos(t) * r, y, Math.sin(t) * r - 0.6], i * 3);
+    mr[i] = Math.random();
+  }
+  const moteGeo = new BufferGeometry();
+  moteGeo.setAttribute('position', new BufferAttribute(mp, 3));
+  moteGeo.setAttribute('aRnd', new BufferAttribute(mr, 1));
+  const moteField = new Points(
+    moteGeo,
+    new ShaderMaterial({
+      uniforms: { ...uniforms, uColor: { value: GOLD } },
+      vertexShader: `uniform float uTime; uniform float uPixelRatio; attribute float aRnd; varying float vA;
+        void main(){ vec3 p = position; p.y += sin(uTime*.25 + aRnd*20.)*.08; vec4 mv = modelViewMatrix*vec4(p,1.);
+          vA = .25 + .5*abs(sin(uTime*.6 + aRnd*30.)); gl_PointSize = (1.5 + aRnd*2.5)*uPixelRatio*(4.4 / -mv.z); gl_Position = projectionMatrix*mv; }`,
+      fragmentShader: `uniform vec3 uColor; varying float vA; void main(){ float d = length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor = vec4(uColor, vA*smoothstep(.5,0.,d)); }`,
+      transparent: true,
+      depthWrite: false,
+      blending: AdditiveBlending,
+    }),
+  );
+  scene.add(moteField);
 
   // Interaction: horizontal drag spins the globe; vertical swipes still scroll the page.
   let yaw = 0, vel = 0, dragging = false, lastX = 0, pointerY = 0, pointerX = 0;

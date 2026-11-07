@@ -6,7 +6,6 @@ import Kicker from '../components/Kicker.astro';
 import Icon from '../components/Icon.astro';
 import Faq from '../components/Faq.astro';
 import Enquiry from '../components/Enquiry.astro';
-import talbiyah from '../data/talbiyah.json';
 import { site, umrahWays, services, faqs, cities, arabic } from '../data/site';
 import { u } from '../lib/url';
 
@@ -34,11 +33,10 @@ const schema = [{
     <div class="container"><Departure /></div>
   </section>
 
-  <section class="section" aria-labelledby="umrah-title">
+  <section class="section section--pattern" aria-labelledby="umrah-title">
     <div class="container">
       <div class="head reveal">
         <Kicker ar={arabic.umrah} text="Umrah" />
-        <svg class="talbiyah" viewBox={talbiyah.viewBox} role="img" aria-label={`${talbiyah.text} (Labbayk Allahumma Labbayk)`} lang="ar"><path d={talbiyah.d} /></svg>
         <h2 id="umrah-title">Two ways to go. <span class="accent">Both planned by us.</span></h2>
         <p class="lead">Most of our pilgrims choose a tailor-made Umrah. If you would rather travel with others and a guide, join one of our three group departures a year.</p>
       </div>
@@ -56,7 +54,7 @@ const schema = [{
     </div>
   </section>
 
-  <section class="section section--tint" aria-labelledby="svc-title">
+  <section class="section" aria-labelledby="svc-title">
     <div class="container">
       <div class="head reveal">
         <Kicker ar={arabic.services} text="Beyond Umrah" />
@@ -70,7 +68,7 @@ const schema = [{
     </div>
   </section>
 
-  <section class="section" aria-labelledby="how-title">
+  <section class="section section--tint" aria-labelledby="how-title">
     <div class="container">
       <div class="head reveal">
         <Kicker ar={arabic.journey} text="How we work" />

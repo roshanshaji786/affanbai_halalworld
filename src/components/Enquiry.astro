@@ -10,17 +10,17 @@ const months = Array.from({ length: 12 }, (_, i) => {
   return d.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
 });
 ---
-<section class="section section--tint" id="enquire" aria-labelledby="enq-title">
+<section class="section section--dark" id="enquire" aria-labelledby="enq-title">
   <div class="container enquiry">
     <div>
       <Kicker ar={arabic.contact} text="Enquire" />
       <h2 id="enq-title">{title}</h2>
       <p class="lead">This opens WhatsApp with your details ready to send. A consultant replies, usually within a few hours.</p>
       <ul class="contact-list">
-        <li><a href={waLink()} target="_blank" rel="noopener" data-wa="enquiry-side"><Icon name="whatsapp" /><small>WhatsApp</small><span>{site.phone}</span></a></li>
-        <li><a href={`tel:${site.phoneE164}`}><Icon name="phone" /><small>Call</small><span>{site.phone}</span></a></li>
-        <li><a href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="pin" /><small>Visit</small><span>{site.address.locality}</span></a></li>
-        <li><div><Icon name="clock" /><small>Hours</small><span>{site.hoursText}</span></div></li>
+        <li><a href={waLink()} target="_blank" rel="noopener" data-wa="enquiry-side"><Icon name="whatsapp" /><div><small>WhatsApp</small><span>{site.phone}</span></div></a></li>
+        <li><a href={`tel:${site.phoneE164}`}><Icon name="phone" /><div><small>Call</small><span>{site.phone}</span></div></a></li>
+        <li><a href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="pin" /><div><small>Visit</small><span>{site.address.locality}, {site.address.region}</span></div></a></li>
+        <li><div><Icon name="clock" /><div><small>Hours</small><span>{site.hoursText}</span></div></div></li>
       </ul>
     </div>
     <form class="form" data-enquiry data-wa={site.whatsapp}>
