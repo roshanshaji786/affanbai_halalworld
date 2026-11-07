@@ -1,13 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import PackageCard from '../components/PackageCard.astro';
-import Kicker from '../components/Kicker.astro';
+import Departure from '../components/Departure.astro';
 import Icon from '../components/Icon.astro';
 import Faq from '../components/Faq.astro';
 import Enquiry from '../components/Enquiry.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { cities, packages, faqs, inclusionInfo, arabic, site, waLink, type City, type Inclusion } from '../data/site';
+import { cities, faqs, umrahWays, site, waLink, type City } from '../data/site';
 import { u } from '../lib/url';
 
 export function getStaticPaths() {
@@ -15,16 +13,16 @@ export function getStaticPaths() {
 }
 const { c } = Astro.props as { c: City };
 const label = c.altName ? `${c.name} (${c.altName})` : c.name;
-const crumbs = [{ name: 'Umrah packages', href: '/umrah-packages/' }, { name: `From ${c.name}`, href: `/umrah-packages-from-${c.slug}/` }];
-const allFaqs = [...c.faqs, ...faqs.slice(0, 3)];
-const inc: Inclusion[] = ['visa', 'flights', 'hotels', 'meals', 'transfers', 'ziyarat'];
+const crumbs = [{ name: `Umrah from ${c.name}`, href: `/umrah-packages-from-${c.slug}/` }];
+const allFaqs = [...c.faqs, faqs[4], faqs[5]];
+const wayHref = ['/tailor-made-umrah/', '/group-umrah/'];
 const schema = [
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: allFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
   {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `Umrah packages from ${c.name}`,
-    serviceType: 'Umrah travel package',
+    serviceType: 'Umrah travel planning',
     provider: { '@id': `${site.url}/#agency` },
     areaServed: [c.name, ...c.nearby].map((n) => ({ '@type': 'Place', name: n })),
     url: new URL(u(`/umrah-packages-from-${c.slug}/`), Astro.site).href,
@@ -32,44 +30,52 @@ const schema = [
 ];
 const others = cities.filter((o) => o.slug !== c.slug);
 ---
-<Base title={`Umrah packages from ${c.name}${c.altName ? ` (${c.altName})` : ''}`} description={`Umrah packages from ${label} with visa, flights from ${c.airportCode}, hotels near the Haram, meals and transfers. Serving ${c.nearby.slice(0, 5).join(', ')} and nearby. Call ${site.phone}.`} crumbs={crumbs} schema={schema}>
-  <PageHero title={`Umrah packages from <span class="accent">${c.name}</span>`} lead={c.intro} crumbs={crumbs} ar={arabic.makkah}>
+<Base title={`Umrah packages from ${label}`} description={`Tailor-made Umrah and group Umrah with an Ameer from ${label}, flying from ${c.airportCode}. Serving ${c.nearby.slice(0, 5).join(', ')} and nearby. Call ${site.phone}.`} crumbs={crumbs} schema={schema}>
+  <PageHero label={`Umrah from ${c.name}`} title={`Umrah from <span class="accent">${c.name}</span>`} lead={c.intro} crumbs={crumbs}>
     <ul class="facts">
       <li><b>{c.airportCode}</b>{c.airport.replace(' International Airport', '')} airport</li>
-      <li><b>{packages.length} packages</b>8 to 15 days</li>
-      <li><b>Visa to return</b>One team</li>
+      <li><b>Your dates</b>Tailor-made</li>
+      <li><b>Mar · Jul · Nov</b>Group departures</li>
     </ul>
-    <div class="hero-ctas"><a class="btn btn--gold" href={waLink(`Assalamu alaikum, I am from ${c.name} and would like to know about Umrah packages.`)} target="_blank" rel="noopener" data-wa={`city-${c.slug}`}><Icon name="whatsapp" />Get a quote on WhatsApp</a></div>
+    <div class="hero-ctas"><a class="btn btn--accent" href={waLink(`Assalamu alaikum, I am from ${c.name} and would like to plan an Umrah.`)} target="_blank" rel="noopener" data-wa={`city-${c.slug}`}><Icon name="whatsapp" />Plan my Umrah</a></div>
   </PageHero>
 
-  <section class="section section--pattern">
+  <section class="section">
     <div class="container">
-      <div class="head reveal"><Kicker ar={arabic.packages} text={`Packages for ${c.name}`} /><h2>Umrah packages for pilgrims from {c.name}</h2><p class="lead">{c.why}</p></div>
-      <div class="grid grid--3 reveal-stagger">{packages.map((p, i) => <PackageCard p={p} featured={i === 0} />)}</div>
+      <div class="head"><h2>Two ways to go from {c.name}</h2><p class="lead">{c.why}</p></div>
+      <div class="ways">
+        {umrahWays.map((w, i) => (
+          <article class:list={['way', { 'way--primary': i === 0 }]}>
+            <span class="way-kicker">{w.kicker}</span>
+            <h3>{w.name}</h3>
+            <p>{w.short}</p>
+            <a class="link" href={u(wayHref[i])}>Details <Icon name="arrow" /></a>
+          </article>
+        ))}
+      </div>
+      <div style="margin-top:20px"><Departure /></div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div class="prose">
+        <h2>From {c.airportCode} to the holy cities</h2>
+        <p>{c.airportNote}</p>
+        <p>Flights from {c.airport} usually connect through a Gulf hub to Jeddah (JED) or Madinah (MED). We choose the routing with the shortest total journey for your dates and confirm the timings before you pay.</p>
+      </div>
+      <div>
+        <h3>Areas we serve near {c.name}</h3>
+        <ul class="chips">{c.nearby.map((n) => <li>{n}</li>)}</ul>
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="container split">
-      <div class="prose reveal">
-        <Kicker ar={arabic.journey} text="Your route" />
-        <h2>From {c.airportCode} to the holy cities</h2>
-        <p>{c.airportNote}</p>
-        <p>Flights from {c.airport} usually connect through a Gulf hub to Jeddah (JED) or Madinah (MED). We pick the routing with the shortest total journey for your dates and tell you the exact timings before you pay.</p>
-        <h3>Areas we serve near {c.name}</h3>
-        <ul class="chips">{c.nearby.map((n) => <li>{n}</li>)}</ul>
-      </div>
-      <div class="light reveal"><div class="incl reveal-stagger">{inc.map((k) => <div class="incl-item"><Icon name={k} /><h3>{inclusionInfo[k].title}</h3><p>{inclusionInfo[k].text}</p></div>)}</div></div>
-    </div>
-  </section>
-
-  <section class="section section--tint">
-    <div class="container">
-      <div class="head reveal"><Kicker ar={arabic.questions} text="Questions" /><h2>Umrah from {c.name}: your questions</h2></div>
+      <div><h2>Questions from {c.name}</h2><p class="muted small">Also: {others.map((o, i) => <>{i > 0 && ' · '}<a href={u(`/umrah-packages-from-${o.slug}/`)}>Umrah from {o.name}</a></>)}</p></div>
       <Faq items={allFaqs} />
-      <p style="margin-top:28px;color:var(--ink-soft)">Also see: {others.map((o, i) => <>{i > 0 && ' · '}<a href={u(`/umrah-packages-from-${o.slug}/`)}>Umrah packages from {o.name}</a></>)}</p>
     </div>
   </section>
-  <section class="section"><CtaBand title={`Plan your Umrah from ${c.name}`} /></section>
-  <Enquiry from={c.airportCode} />
+  <Enquiry title={`Plan your Umrah from ${c.name}.`} />
 </Base>

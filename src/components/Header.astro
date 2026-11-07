@@ -13,7 +13,7 @@ const isCurrent = (href: string) => here.startsWith(u(href));
     <nav class="nav" aria-label="Main">
       {nav.map((n) => <a href={u(n.href)} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a>)}
     </nav>
-    <a class="btn btn--gold btn--sm header-cta" href={waLink()} target="_blank" rel="noopener" data-wa="header"><Icon name="whatsapp" />Chat on WhatsApp</a>
+    <a class="btn btn--line btn--sm header-cta" href={waLink()} target="_blank" rel="noopener" data-wa="header"><Icon name="whatsapp" />WhatsApp</a>
     <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-btn><span></span></button>
   </div>
 </header>
@@ -21,5 +21,5 @@ const isCurrent = (href: string) => here.startsWith(u(href));
   <a href={u('/')}>Home</a>
   {nav.map((n) => <a href={u(n.href)}>{n.label}</a>)}
   <a class="btn btn--wa btn--block" href={waLink()} target="_blank" rel="noopener" data-wa="menu"><Icon name="whatsapp" />WhatsApp us</a>
-  <a class="btn btn--ghost btn--block" href={`tel:${site.phoneE164}`}><Icon name="phone" />Call {site.phone}</a>
+  <a class="btn btn--line btn--block" href={`tel:${site.phoneE164}`}><Icon name="phone" />Call {site.phone}</a>
 </div>

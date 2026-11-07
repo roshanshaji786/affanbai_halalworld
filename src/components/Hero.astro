@@ -1,40 +1,21 @@
 ---
 import Icon from './Icon.astro';
-import talbiyah from '../data/talbiyah.json';
 import { site, waLink } from '../data/site';
 import { u } from '../lib/url';
 ---
 <section class="hero" aria-labelledby="hero-title">
-  <div class="container hero-inner">
+  <div class="container hero-grid">
     <div class="hero-copy">
-      <span class="hero-eyebrow"><b>Umrah</b>From Trivandrum and Kochi, all year</span>
-      <svg class="talbiyah" viewBox={talbiyah.viewBox} role="img" aria-label={`${talbiyah.text} (Labbayk Allahumma Labbayk)`} lang="ar">
-        <path d={talbiyah.d} />
-      </svg>
-      <span class="talbiyah-tr">“Here I am, O Allah, here I am.”</span>
-      <h1 id="hero-title">Journeys of faith, <span class="accent">planned with care</span></h1>
-      <p class="lead">Umrah packages from Kerala with your visa, flights, hotels near the Haram, meals, transfers and a Malayalam-speaking guide, all handled by one team in Thiruvananthapuram.</p>
+      <p class="hero-kicker"><span>{site.role}</span><span>Thiruvananthapuram</span></p>
+      <h1 id="hero-title">Umrah and travel, <span class="accent">planned around you.</span></h1>
+      <p class="lead">Tell us your dates, how many days and how close to the Haram you want to stay. We build the Umrah to fit, and book every other trip too.</p>
       <div class="hero-ctas">
-        <a class="btn btn--gold" href={waLink()} target="_blank" rel="noopener" data-wa="hero"><Icon name="whatsapp" />Plan my Umrah</a>
-        <a class="btn btn--ghost" href={u('/umrah-packages/')}>See packages <Icon name="arrow" /></a>
+        <a class="btn btn--accent" href={waLink('Assalamu alaikum, I would like to plan a tailor-made Umrah.')} target="_blank" rel="noopener" data-wa="hero"><Icon name="whatsapp" />Plan my Umrah</a>
+        <a class="btn btn--line" href={u('/#departure')}>Next group departure</a>
       </div>
-      <ul class="hero-trust">
-        <li>Office in Trivandrum</li>
-        <li>Visa to return, one team</li>
-        <li>Support on WhatsApp, day and night</li>
-      </ul>
     </div>
     <div class="hero-visual" data-globe>
       <img class="globe-fallback" src={u('/globe-fallback.svg')} alt="" width="600" height="600" fetchpriority="low" decoding="async" />
-    </div>
-  </div>
-  <div class="hero-route">
-    <div class="container route" aria-label="Typical Umrah route">
-      <span class="stop">{site.airports.map((a) => a.code).join(' · ')}<small>Kerala</small></span><span class="dot"></span>
-      <span class="stop">JED<small>Jeddah</small></span><span class="dot"></span>
-      <span class="stop">Makkah<small>Umrah and prayers</small></span><span class="dot"></span>
-      <span class="stop">Madinah<small>Masjid an-Nabawi</small></span><span class="dot"></span>
-      <span class="stop">Home<small>with Zamzam</small></span>
     </div>
   </div>
 </section>
@@ -57,8 +38,6 @@ import { u } from '../lib/url';
     } catch { return false; }
   })();
   if (host && !reduce && !slowNet && !weak && gl) {
-    // Start on the first sign of a person (move, touch, scroll, key) or after a quiet moment,
-    // so the 3D never competes with the first paint or the first tap.
     let started = false;
     const events = ['pointermove', 'pointerdown', 'touchstart', 'scroll', 'keydown', 'wheel'] as const;
     const go = () => {

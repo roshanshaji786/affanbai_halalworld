@@ -1,4 +1,4 @@
-// Static globe drawn at build time. Shown instantly, then cross-faded into the WebGL globe on capable devices.
+// Static light globe drawn at build time. Shown instantly, then cross-faded into the WebGL globe on capable devices.
 import { Euler, Quaternion, Vector3 } from 'three';
 
 import { LAND } from '../scripts/land-points';
@@ -34,6 +34,6 @@ export function GET() {
       return `<path d="${d}"/>`;
     })
     .join('');
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}"><defs><radialGradient id="b" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#2e0f09"/><stop offset=".8" stop-color="#170705"/><stop offset="1" stop-color="#5a3a1c"/></radialGradient><radialGradient id="h" r=".5"><stop offset=".78" stop-color="#e2c27d" stop-opacity=".22"/><stop offset="1" stop-color="#e2c27d" stop-opacity="0"/></radialGradient></defs><circle cx="${C}" cy="${C}" r="${R * 1.2}" fill="url(#h)"/><circle cx="${C}" cy="${C}" r="${R}" fill="url(#b)"/><path d="${dots}" stroke="#f3e6cf" stroke-opacity=".55" stroke-width="3.4" stroke-linecap="round"/><path d="${hot}" stroke="#e2c27d" stroke-width="3.6" stroke-linecap="round"/><g fill="none" stroke="#e2c27d" stroke-width="1.6" stroke-opacity=".75">${arcs}</g></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}"><defs><radialGradient id="b" cx="50%" cy="38%" r="62%"><stop offset="0" stop-color="#f9f7f2"/><stop offset=".78" stop-color="#ece8e0"/><stop offset="1" stop-color="#d6d0c5"/></radialGradient></defs><circle cx="${C}" cy="${C}" r="${R}" fill="url(#b)"/><path d="${dots}" stroke="#4a453f" stroke-opacity=".42" stroke-width="2.8" stroke-linecap="round"/><path d="${hot}" stroke="#6e2416" stroke-opacity=".75" stroke-width="3" stroke-linecap="round"/><g fill="none" stroke="#6e2416" stroke-width="1.4" stroke-opacity=".5">${arcs}</g></svg>`;
   return new Response(svg, { headers: { 'Content-Type': 'image/svg+xml' } });
 }

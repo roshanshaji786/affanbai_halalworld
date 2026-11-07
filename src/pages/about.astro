@@ -3,28 +3,28 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { site, arabic } from '../data/site';
+import { site } from '../data/site';
 const crumbs = [{ name: 'About', href: '/about/' }];
 const regs = site.registrations.filter((r) => r.value);
 ---
-<Base title="About Halal World, Umrah travel agency in Trivandrum" description="Halal World is a travel agency in Thiruvananthapuram that plans Umrah packages from Kerala, with a local team you can meet in person." crumbs={crumbs}>
-  <PageHero title='A Trivandrum team, <span class="accent">travelling with you</span>' lead={`${site.name} plans Umrah journeys for families across Kerala. Our promise is in our name: travel that is halal in every detail, and care that goes with you all the way.`} crumbs={crumbs} ar={arabic.welcome} />
+<Base title="About Halal World, travel consultancy in Trivandrum" description="Halal World is a small travel consultancy in Thiruvananthapuram. Umrah is our main work; we also book flights, visas, hotels and holidays." crumbs={crumbs}>
+  <PageHero label="About us" title='A small consultancy, <span class="accent">not a call centre</span>' lead={`${site.name} is a travel consultancy in Thiruvananthapuram. You talk to the person who plans your trip, from the first message to the flight home.`} crumbs={crumbs} />
   <section class="section">
     <div class="container split">
       <div class="prose">
-        <h2>What we stand for</h2>
-        <p>We believe Umrah should be about worship, not worry. So we keep our packages clear, our hotels close to the Haram and our team easy to reach.</p>
-        <p>Every group is briefed before departure, travels with a guide and has our team on WhatsApp throughout. Elders and first-timers get extra attention, every day.</p>
+        <h2>How we work</h2>
+        <p>Umrah is the heart of what we do. Most pilgrims come to us for a tailor-made trip planned around their dates and comfort; others join one of our group departures with an Ameer in March, July or November.</p>
+        <p>We also book flights, visas, hotels and holidays for the same families and businesses, so one consultant knows your preferences.</p>
         <h2>Registrations</h2>
         {regs.length > 0
           ? <ul class="ticks">{regs.map((r) => <li><Icon name="shield" /><span><strong>{r.label}</strong>: {r.value}</span></li>)}</ul>
           : <p>Our registration details are available on request.</p>}
       </div>
-      <ul class="why">
-        <li><Icon name="heart" /><div><h3>Sincere service</h3><p>We treat every pilgrim as a guest of Allah, from the first call to the flight home.</p></div></li>
-        <li><Icon name="doc" /><div><h3>Clear paperwork</h3><p>Written quotes, receipts for every payment and no surprises at the airport.</p></div></li>
-        <li><Icon name="users" /><div><h3>Small, cared-for groups</h3><p>A guide who knows each family, and a team that answers at any hour.</p></div></li>
-        <li><Icon name="pin" /><div><h3>Rooted in Thiruvananthapuram</h3><p>Visit our office, meet the team and ask everything before you pay.</p></div></li>
+      <ul class="values">
+        <li><h3>Advice before selling</h3><p>We tell you what we would choose in your place, even when it costs less.</p></li>
+        <li><h3>Everything in writing</h3><p>Written quotes, receipts for every payment and no surprises at the airport.</p></li>
+        <li><h3>Care for elders</h3><p>Short walks, wheelchairs on request and a call every day.</p></li>
+        <li><h3>Easy to reach</h3><p>Visit our office in {site.address.locality} or message us at any hour while you travel.</p></li>
       </ul>
     </div>
   </section>

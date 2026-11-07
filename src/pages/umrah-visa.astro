@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import Faq from '../components/Faq.astro';
 import Enquiry from '../components/Enquiry.astro';
-import { arabic, site, waLink } from '../data/site';
+import { site, waLink } from '../data/site';
 const crumbs = [{ name: 'Umrah visa', href: '/umrah-visa/' }];
 const vf = [
   { q: 'Can I get only the Umrah visa from you?', a: 'Yes. We can file the visa alone, or add it to a land package if you already have flights.' },
@@ -15,7 +15,7 @@ const vf = [
 const schema = [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: vf.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }];
 ---
 <Base title="Umrah visa from India: documents and process" description="Apply for your Saudi Umrah visa from Kerala with Halal World. The documents you need, how long it takes, and how we check every detail before filing." crumbs={crumbs} schema={schema}>
-  <PageHero title='Umrah visa <span class="accent">from India</span>' lead="We file your Saudi Umrah e-visa as an authorised agent and check every document first, so your application goes in right the first time." crumbs={crumbs} ar={arabic.journey} />
+  <PageHero title='Umrah visa <span class="accent">from India</span>' lead="We file your Saudi Umrah e-visa and check every document first, so your application goes in right the first time." crumbs={crumbs} />
   <section class="section">
     <div class="container with-aside">
       <div class="prose">
@@ -41,11 +41,11 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEnti
       </div>
       <aside class="aside-sticky"><div class="aside-card">
         <h3>Start your visa today</h3>
-        <p style="color:rgba(246,240,230,.75)">Send your passport scan on WhatsApp and we’ll check it for free.</p>
+        <p class="muted">Send your passport scan on WhatsApp and we’ll check it for free.</p>
         <a class="btn btn--wa" href={waLink('Assalamu alaikum, I need help with an Umrah visa.')} target="_blank" rel="noopener" data-wa="visa"><Icon name="whatsapp" />WhatsApp us</a>
-        <a class="btn btn--ghost" href={`tel:${site.phoneE164}`}><Icon name="phone" />Call {site.phone}</a>
+        <a class="btn btn--line" href={`tel:${site.phoneE164}`}><Icon name="phone" />Call {site.phone}</a>
       </div></aside>
     </div>
   </section>
-  <Enquiry />
+  <Enquiry preset="Visa" title="Send us your visa question." />
 </Base>

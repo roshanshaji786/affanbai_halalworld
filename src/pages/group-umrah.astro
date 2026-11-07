@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Departure from '../components/Departure.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Enquiry from '../components/Enquiry.astro';
+import { umrahWays, groupDepartures, nextDepartures, faqs, site } from '../data/site';
+import { u } from '../lib/url';
+const way = umrahWays[1];
+const crumbs = [{ name: 'Group Umrah', href: '/group-umrah/' }];
+const upcoming = nextDepartures(3);
+const gf = [
+  faqs[5],
+  { q: 'Who is the Ameer?', a: 'An experienced leader who has guided many groups. He leads the rites, the prayers and the reminders, and is the first person you turn to on the journey.' },
+  { q: 'Can I join alone?', a: 'Yes. Many pilgrims join on their own. We arrange shared rooms with others from the group of the same gender.' },
+  faqs[3],
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: gf.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  ...upcoming.map((d) => ({
+    '@context': 'https://schema.org',
+    '@type': 'TouristTrip',
+    name: `Group Umrah with an Ameer, ${d.label}`,
+    description: way.short,
+    touristType: 'Pilgrims',
+    provider: { '@id': `${site.url}/#agency` },
+    itinerary: { '@type': 'ItemList', itemListElement: ['Makkah', 'Madinah'].map((n, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'Place', name: n } })) },
+  })),
+];
+---
+<Base title="Group Umrah with an Ameer: March, July, November" description={`Join Halal World's group Umrah from Kerala, led by an Ameer. Fixed departures every four months: March, July and November. Next group: ${upcoming[0].label}.`} crumbs={crumbs} schema={schema}>
+  <PageHero label={way.kicker} title='Group Umrah <span class="accent">with an Ameer</span>' lead={way.short} crumbs={crumbs} />
+
+  <section class="section section--tight" style="padding-top:clamp(28px,5vw,48px)">
+    <div class="container"><Departure /></div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div><h2>How a group works</h2><p class="lead">About {groupDepartures.days} days, with nights in Makkah and Madinah, travelling together from Kerala.</p></div>
+      <ol class="timeline">
+        <li><small>Before</small><div><h3>Class and briefing</h3><p>Learn the rites, meet the Ameer and the group, and get your packing list.</p></div></li>
+        <li><small>Makkah</small><div><h3>Umrah together</h3><p>The Ameer leads ihram, tawaf and sa’i, then prayers and ziyarat through the stay.</p></div></li>
+        <li><small>Madinah</small><div><h3>Masjid an-Nabawi</h3><p>Prayers, Rawdah visits where permits allow, and ziyarat of the city.</p></div></li>
+        <li><small>Home</small><div><h3>Return with Zamzam</h3><p>We stay in touch until everyone is home.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div><h2>Why people choose a group</h2></div>
+      <ul class="ticks">{way.points.map((p) => <li><Icon name="check" /><span>{p}</span></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div><h2>Questions</h2><p class="muted">Want your own dates instead? See <a href={u('/tailor-made-umrah/')}>tailor-made Umrah</a>.</p></div>
+      <Faq items={gf} />
+    </div>
+  </section>
+
+  <Enquiry preset="Group Umrah with an Ameer" title="Hold a seat on the next group." />
+</Base>

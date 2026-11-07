@@ -1,6 +1,6 @@
 /**
  * ONE FILE TO EDIT.
- * Brand, contact details, packages, city pages, FAQs and guides all live here.
+ * Brand, contact details, group departures, services, city pages, FAQs and guides all live here.
  * Every page is generated from this data at build time.
  *
  * Items marked TODO are placeholders until the real details are confirmed.
@@ -8,14 +8,14 @@
 
 export const site = {
   name: 'Halal World',
-  legalName: 'Halal World Tours & Travels', // TODO: confirm registered business name
+  legalName: 'Halal World Travel Consultancy', // TODO: confirm registered business name
   tagline: 'Travel through the earth',
-  // TODO: replace with the real domain before going live (used for canonical URLs, sitemap and schema).
-  url: 'https://www.halalworld.in',
+  role: 'Travel consultancy',
+  url: 'https://halalworld.co.in',
   phone: '+91 99470 32507',
   phoneE164: '+919947032507',
   whatsapp: '919947032507',
-  email: 'info@halalworld.in', // TODO: confirm email
+  email: 'info@halalworld.co.in', // TODO: confirm email
   address: {
     street: '', // TODO: full street address exactly as on Google Maps
     locality: 'Thiruvananthapuram',
@@ -48,188 +48,91 @@ export const site = {
   ],
 };
 
-export type Inclusion = 'visa' | 'flights' | 'hotels' | 'meals' | 'transfers' | 'ziyarat' | 'guide' | 'zamzam' | 'insurance';
-
-export const inclusionInfo: Record<Inclusion, { title: string; text: string }> = {
-  visa: { title: 'Umrah visa', text: 'We file your Saudi Umrah e-visa and check every document before it goes in.' },
-  flights: { title: 'Return flights', text: 'From Thiruvananthapuram (TRV) or Kochi (COK) to Jeddah or Madinah.' },
-  hotels: { title: 'Hotels near the Haram', text: 'Rooms close to Masjid al-Haram and Masjid an-Nabawi, chosen for walking distance.' },
-  meals: { title: 'Meals', text: 'Indian and Kerala-style meals on full-board packages, so you eat well between prayers.' },
-  transfers: { title: 'Transfers', text: 'Air-conditioned coaches for the airport, Makkah to Madinah and every ziyarat.' },
-  ziyarat: { title: 'Ziyarat', text: 'Guided visits to the historic sites of Makkah and Madinah.' },
-  guide: { title: 'Group guide', text: 'A Malayalam-speaking guide who walks first-timers through every step of Umrah.' },
-  zamzam: { title: 'Zamzam', text: 'Help with your Zamzam allowance on the flight home.' },
-  insurance: { title: 'Travel insurance', text: 'Medical cover for the trip, included where the airline or visa requires it.' },
+/* ---------------------------------------------------------------------------
+ * Group departures: fixed every four months, starting in March.
+ * Add an exact date (YYYY-MM-DD) for a departure once it is confirmed.
+ * ------------------------------------------------------------------------- */
+export const groupDepartures = {
+  months: [3, 7, 11], // March, July, November
+  days: 15, // TODO: confirm usual group length
+  // TODO: add confirmed dates, e.g. '2027-03': { date: '2027-03-12', note: 'Seats open' }
+  confirmed: {} as Record<string, { date?: string; note?: string }>,
 };
 
-export type Package = {
-  slug: string;
-  name: string;
-  short: string;
-  badge?: string;
-  days: number;
-  makkahNights: number;
-  madinahNights: number;
-  hotelClass: string;
-  hotelExamples: string;
-  distance: string;
-  room: string;
-  meals: string;
-  /** Starting price per person in INR. null shows "Ask for this month's fare". */
-  startsFrom: number | null;
-  bestFor: string;
-  highlights: string[];
-  includes: Inclusion[];
-  excludes: string[];
-  description: string;
-};
+export type Departure = { key: string; label: string; month: number; year: number; date?: string; note?: string };
 
-// TODO: replace with the tiers, hotels and fares you actually sell.
-export const packages: Package[] = [
+/** The next `count` group departures from `from` (a departure in the current month counts only if its confirmed date is still ahead). */
+export function nextDepartures(count = 3, from = new Date()): Departure[] {
+  const out: Departure[] = [];
+  let y = from.getFullYear();
+  let m = from.getMonth() + 1;
+  for (let guard = 0; out.length < count && guard < 48; guard++) {
+    if (groupDepartures.months.includes(m)) {
+      const key = `${y}-${String(m).padStart(2, '0')}`;
+      const c = groupDepartures.confirmed[key] ?? {};
+      const isCurrent = y === from.getFullYear() && m === from.getMonth() + 1;
+      const ahead = c.date ? new Date(c.date + 'T23:59:59') >= from : !isCurrent;
+      if (ahead) {
+        const label = new Date(y, m - 1, 1).toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+        out.push({ key, label, month: m, year: y, ...c });
+      }
+    }
+    m++;
+    if (m > 12) { m = 1; y++; }
+  }
+  return out;
+}
+
+/* ---------------------------------------------------------------------------
+ * The two ways to do Umrah with us.
+ * ------------------------------------------------------------------------- */
+export const umrahWays = [
   {
-    slug: 'premium-short-stay',
-    name: 'Premium Short Stay Umrah',
-    short: 'Eight days, five-star hotels steps from the Haram. Built for people who can only take a week off.',
-    badge: 'Most popular',
-    days: 8,
-    makkahNights: 4,
-    madinahNights: 3,
-    hotelClass: '5 star',
-    hotelExamples: 'Anjum Makkah and Anwar Al Madinah Mövenpick, or similar',
-    distance: 'About 100 to 300 m from the Haram',
-    room: 'Double, triple or quad sharing',
-    meals: 'Breakfast and dinner',
-    startsFrom: 130000,
-    bestFor: 'Working professionals and couples',
-    highlights: ['Five-star hotels close to both Harams', 'Short leave, full Umrah', 'Ziyarat in Makkah and Madinah'],
-    includes: ['visa', 'flights', 'hotels', 'meals', 'transfers', 'ziyarat', 'guide'],
-    excludes: ['Personal shopping and laundry', 'Single room supplement', 'Anything not listed as included'],
-    description:
-      'Our Premium Short Stay Umrah fits a complete Umrah and visits to both holy cities into eight days. You stay in five-star hotels a short walk from Masjid al-Haram and Masjid an-Nabawi, so you spend your time in prayer, not in traffic.',
+    slug: 'tailor-made',
+    name: 'Tailor-made Umrah',
+    kicker: 'Most requested',
+    short: 'Your dates, your number of days, your hotel distance. We plan around your family’s comfort.',
+    points: [
+      'Leave on any date that suits you',
+      'Choose the number of days, from a short week to a long stay',
+      'Pick how close you stay to the Haram, from steps away to a shuttle ride',
+      'Split nights between Makkah and Madinah as you like',
+      'Rooms, meals and pace planned for elders and children',
+    ],
   },
   {
-    slug: 'family',
-    name: 'Family Umrah',
-    short: 'Fifteen unhurried days with family rooms, extra care for elders and children, and a guide who knows your group.',
-    days: 15,
-    makkahNights: 8,
-    madinahNights: 6,
-    hotelClass: '4 star',
-    hotelExamples: 'Hand-picked four-star hotels within walking distance',
-    distance: 'About 300 to 600 m from the Haram',
-    room: 'Family rooms and connecting rooms on request',
-    meals: 'Breakfast, lunch and dinner',
-    startsFrom: null,
-    bestFor: 'Families with elders or young children',
-    highlights: ['Wheelchair help for elders on request', 'Family and connecting rooms', 'Relaxed pace with rest days'],
-    includes: ['visa', 'flights', 'hotels', 'meals', 'transfers', 'ziyarat', 'guide', 'zamzam'],
-    excludes: ['Personal expenses', 'Wheelchair hire charges inside the Haram', 'Anything not listed as included'],
-    description:
-      'Family Umrah gives you fifteen days at a gentle pace, with family rooms, meals for all three times of the day and a guide who looks after elders and first-timers. It suits households travelling together from Kerala.',
-  },
-  {
-    slug: 'value',
-    name: 'Value Umrah',
-    short: 'A complete Umrah at an honest price, with clean three-star hotels, full board and a hotel shuttle.',
-    days: 15,
-    makkahNights: 9,
-    madinahNights: 5,
-    hotelClass: '3 star',
-    hotelExamples: 'Clean three-star hotels with a shuttle to the Haram',
-    distance: 'About 800 m to 1.5 km, with shuttle',
-    room: 'Quad or quint sharing',
-    meals: 'Breakfast, lunch and dinner',
-    startsFrom: null,
-    bestFor: 'First-time pilgrims and groups on a budget',
-    highlights: ['Lowest fare without cutting essentials', 'Full board, Kerala-style food', 'Group departures every month'],
-    includes: ['visa', 'flights', 'hotels', 'meals', 'transfers', 'ziyarat', 'guide'],
-    excludes: ['Personal expenses', 'Room upgrades', 'Anything not listed as included'],
-    description:
-      'Value Umrah keeps the fare low without cutting what matters: your visa, return flights, three meals a day, transfers, ziyarat and a guide are all included. Hotels are a short shuttle ride from the Haram.',
-  },
-  {
-    slug: 'ramadan',
-    name: 'Ramadan Umrah',
-    short: 'Spend the last nights of Ramadan in Makkah, with suhoor and iftar arranged and hotels booked early.',
-    badge: 'Book early',
-    days: 15,
-    makkahNights: 9,
-    madinahNights: 5,
-    hotelClass: '4 or 5 star',
-    hotelExamples: 'Hotels booked months ahead for the busiest season',
-    distance: 'About 100 to 600 m from the Haram',
-    room: 'Double, triple or quad sharing',
-    meals: 'Suhoor and iftar',
-    startsFrom: null,
-    bestFor: 'Pilgrims seeking the last ten nights',
-    highlights: ['Last ten nights options', 'Suhoor and iftar arranged', 'Rooms secured before prices rise'],
-    includes: ['visa', 'flights', 'hotels', 'meals', 'transfers', 'ziyarat', 'guide', 'zamzam'],
-    excludes: ['Personal expenses', 'Itikaf arrangements inside the Haram', 'Anything not listed as included'],
-    description:
-      'Ramadan Umrah places you in Makkah for the most blessed nights of the year. Hotels and flights fill up months in advance, so we hold rooms early and arrange suhoor and iftar for the group.',
-  },
-  {
-    slug: 'land-only',
-    name: 'Umrah Land Package',
-    short: 'Already have your visa or tickets? We handle hotels, transfers, ziyarat and support on the ground.',
-    days: 10,
-    makkahNights: 5,
-    madinahNights: 4,
-    hotelClass: '3 to 5 star, your choice',
-    hotelExamples: 'Choose any hotel tier',
-    distance: 'Depends on the hotel you choose',
-    room: 'Any room type',
-    meals: 'Optional',
-    startsFrom: null,
-    bestFor: 'Gulf residents and travellers with their own flights',
-    highlights: ['Pick only what you need', 'Works with your own flights', 'Support on the ground in Saudi Arabia'],
-    includes: ['hotels', 'transfers', 'ziyarat'],
-    excludes: ['Flights', 'Visa (we can add it)', 'Meals unless chosen'],
-    description:
-      'The Umrah Land Package is for pilgrims who already have flights or a visa. We book your hotels in Makkah and Madinah, arrange every transfer and ziyarat, and stay reachable on WhatsApp throughout.',
+    slug: 'group-departures',
+    name: 'Group Umrah with an Ameer',
+    kicker: 'Every four months',
+    short: 'Travel with a guided group led by an Ameer, on fixed departures in March, July and November.',
+    points: [
+      'Led by an experienced Ameer from departure to return',
+      'Group classes before you fly',
+      'Shared ziyarat, prayers and reminders throughout',
+      'Fixed dates, so you can plan leave early',
+      'Ideal for first-timers and those travelling alone',
+    ],
   },
 ];
 
-export type ItineraryDay = { day: string; title: string; text: string };
+/** Options a tailor-made Umrah is built from. Shown on the tailor-made page and in the enquiry form. */
+export const tailorOptions = {
+  days: ['7 to 10 days', '11 to 15 days', '16 to 21 days', 'More than 21 days'],
+  distance: ['Closest possible (under 300 m)', 'Walking distance (300 to 800 m)', 'Shuttle to the Haram (budget friendly)', 'Not sure, advise me'],
+  hotel: ['5 star', '4 star', '3 star', 'Advise me'],
+};
 
-export function itinerary(p: Package): ItineraryDay[] {
-  const days: ItineraryDay[] = [];
-  const fly = p.includes.includes('flights');
-  days.push({
-    day: 'Day 1',
-    title: fly ? 'Fly from Kerala, perform Umrah' : 'Arrive in Jeddah, perform Umrah',
-    text: fly
-      ? 'Wear ihram at home or before the miqat, fly from TRV or COK to Jeddah, then travel by coach to your Makkah hotel. Your guide leads the group through Tawaf and Sa’i.'
-      : 'Meet our team at the airport and travel by coach to your Makkah hotel. Your guide leads the group through Tawaf and Sa’i.',
-  });
-  const m = p.makkahNights;
-  if (m >= 2) {
-    days.push({
-      day: m > 2 ? `Days 2 to ${m}` : 'Day 2',
-      title: 'Prayers in Makkah and ziyarat',
-      text: 'Pray in Masjid al-Haram. On one morning the group visits Jabal al-Nour, Jabal Thawr, Arafat, Muzdalifah and Mina with the guide.',
-    });
-  }
-  days.push({
-    day: `Day ${m + 1}`,
-    title: 'Travel to Madinah',
-    text: 'Check out after Fajr and travel to Madinah by coach or the Haramain high-speed train, depending on your package.',
-  });
-  const end = m + p.madinahNights;
-  days.push({
-    day: end > m + 2 ? `Days ${m + 2} to ${end}` : `Day ${m + 2}`,
-    title: 'Madinah and ziyarat',
-    text: 'Pray in Masjid an-Nabawi and visit Rawdah with a Nusuk permit. Ziyarat to Quba Mosque, Uhud and Masjid al-Qiblatayn.',
-  });
-  days.push({
-    day: `Day ${end + 1}`,
-    title: fly ? 'Fly home' : 'Departure',
-    text: fly
-      ? 'Transfer to the airport and fly back to Kerala with your Zamzam.'
-      : 'Transfer to Madinah or Jeddah airport for your onward flight.',
-  });
-  return days;
-}
+/* ---------------------------------------------------------------------------
+ * Other services.
+ * ------------------------------------------------------------------------- */
+export const services = [
+  { icon: 'flights', title: 'International flights', text: 'Fares to the Gulf, Saudi Arabia, Europe and beyond, with the best routing from TRV or COK.' },
+  { icon: 'plane-in', title: 'Domestic flights', text: 'Tickets across India for work, family visits and connecting journeys.' },
+  { icon: 'visa', title: 'Visa assistance', text: 'Umrah, visit and tourist visas. We check your documents before they are filed.' },
+  { icon: 'hotels', title: 'Hotels worldwide', text: 'Stays chosen for location and value, from Makkah to anywhere you travel.' },
+  { icon: 'transfers', title: 'Transfers', text: 'Airport pick-ups and intercity travel, booked in advance.' },
+  { icon: 'ziyarat', title: 'Sightseeing', text: 'Ziyarat in the holy cities and halal-friendly tours on any trip.' },
+];
 
 export type City = {
   slug: string;
@@ -254,7 +157,7 @@ export const cities: City[] = [
     airportNote: 'Our office is in Trivandrum, so you can meet us before you fly and we can see you off at TRV.',
     nearby: ['Kazhakoottam', 'Attingal', 'Varkala', 'Neyyattinkara', 'Nedumangad', 'Kattakada', 'Balaramapuram', 'Nagercoil'],
     intro:
-      'Halal World is a Trivandrum travel agency, so pilgrims from Thiruvananthapuram get our office, our guides and our phone line in their own city. Packages leave from Thiruvananthapuram International Airport (TRV) with connections to Jeddah and Madinah.',
+      'Halal World is a travel consultancy in Trivandrum. Pilgrims from Thiruvananthapuram can sit with us, plan an Umrah around their own dates and comfort, and fly from Thiruvananthapuram International Airport (TRV).',
     why: 'You fill in your forms with us face to face, hand over documents in person, and meet the rest of your group at a briefing before departure.',
     faqs: [
       {
@@ -267,7 +170,7 @@ export const cities: City[] = [
       },
       {
         q: 'Do you hold a pre-departure class in Trivandrum?',
-        a: 'Yes. Every group gets a briefing on the rites of Umrah, packing and travel days before departure.',
+        a: 'Yes. Every group gets a class on the rites of Umrah, packing and travel days before departure. Tailor-made travellers are welcome to join it.',
       },
     ],
   },
@@ -280,7 +183,7 @@ export const cities: City[] = [
     airportNote: 'Cochin has the widest choice of Gulf and Saudi connections in Kerala, which often means shorter journeys.',
     nearby: ['Ernakulam', 'Aluva', 'Perumbavoor', 'Kothamangalam', 'Muvattupuzha', 'Angamaly', 'Thrissur', 'Kottayam'],
     intro:
-      'Pilgrims from Kochi and central Kerala can start their Umrah from Cochin International Airport (COK), which has more Gulf and Saudi connections than any other airport in the state. Halal World arranges the full journey, from visa to hotels near the Haram.',
+      'Pilgrims from Kochi and central Kerala can start their Umrah from Cochin International Airport (COK), which has more Gulf and Saudi connections than any other airport in the state. We plan the whole journey with you, from visa to the hotel distance you want.',
     why: 'We handle your documents over WhatsApp and courier, and our team meets the group at COK on departure day.',
     faqs: [
       {
@@ -292,8 +195,8 @@ export const cities: City[] = [
         a: 'No. You can share documents on WhatsApp and pay online. We meet you at the airport on the day you fly.',
       },
       {
-        q: 'Which package suits a family from Ernakulam?',
-        a: 'Most families choose our Family Umrah for its rest days and family rooms. Tell us who is travelling and we will suggest the right one.',
+        q: 'Can a family from Ernakulam plan its own dates?',
+        a: 'Yes. Most families choose a tailor-made Umrah: you pick the dates, the number of days and how close to the Haram you stay, and we plan the rest.',
       },
     ],
   },
@@ -306,7 +209,7 @@ export const cities: City[] = [
     airportNote: 'Kollam is about 70 km from TRV, so most of our Kollam pilgrims fly from Trivandrum.',
     nearby: ['Karunagappally', 'Kottarakkara', 'Punalur', 'Chathannoor', 'Paravur', 'Sasthamcotta', 'Kottiyam', 'Kayamkulam'],
     intro:
-      'Families in Kollam are a short drive from our Trivandrum office and from Thiruvananthapuram International Airport (TRV). Halal World plans complete Umrah packages for Kollam pilgrims, with visa, flights, hotels near the Haram and a guide.',
+      'Families in Kollam are a short drive from our Trivandrum office and from Thiruvananthapuram International Airport (TRV). We plan tailor-made Umrah for Kollam pilgrims, or a seat on our next group with an Ameer.',
     why: 'You can visit us in Trivandrum or send documents on WhatsApp, and we can arrange a vehicle from Kollam to the airport for your group.',
     faqs: [
       {
@@ -319,7 +222,7 @@ export const cities: City[] = [
       },
       {
         q: 'Do you have group departures for Kollam?',
-        a: 'Kollam pilgrims join our regular Trivandrum groups, so you travel with families from the same part of Kerala.',
+        a: 'Yes. Kollam pilgrims join our group departures with an Ameer in March, July and November, travelling with families from the same part of Kerala.',
       },
     ],
   },
@@ -343,8 +246,12 @@ export const faqs = [
     a: 'Yes. You pay an advance to hold your seat and the balance before the visa is filed. We give a written receipt for every payment.',
   },
   {
-    q: 'Is the price per person?',
-    a: 'Yes. Prices are per person and depend on room sharing, the season and your departure airport. We confirm the exact fare in writing before you pay.',
+    q: 'How is a tailor-made Umrah priced?',
+    a: 'Every quote is built from your dates, number of days, hotel distance and room sharing. You get the full fare in writing before you pay anything.',
+  },
+  {
+    q: 'When are the group departures?',
+    a: 'Groups with an Ameer leave every four months, in March, July and November. Message us to hold a seat on the next one.',
   },
   {
     q: 'Do you help elderly pilgrims?',
@@ -471,7 +378,7 @@ export const arabic = {
   welcome: 'أهلا وسهلا',
 };
 
-export function waLink(text = 'Assalamu alaikum, I would like to know about your Umrah packages.') {
+export function waLink(text = 'Assalamu alaikum, I would like to plan a trip with Halal World.') {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 

@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { guides, site, arabic, type Guide } from '../../data/site';
+import { guides, site, type Guide } from '../../data/site';
 import { u } from '../../lib/url';
 export function getStaticPaths() { return guides.map((g) => ({ params: { slug: g.slug }, props: { g } })); }
 const { g } = Astro.props as { g: Guide };
@@ -20,7 +20,7 @@ const schema = [{
 const others = guides.filter((o) => o.slug !== g.slug);
 ---
 <Base title={g.title} description={g.description} crumbs={crumbs} schema={schema} ogType="article">
-  <PageHero title={g.title} lead={g.description} crumbs={crumbs} ar={arabic.guide} />
+  <PageHero title={g.title} lead={g.description} crumbs={crumbs} />
   <section class="section">
     <div class="container"><article class="prose">
       {g.sections.map((s) => <>
@@ -28,7 +28,7 @@ const others = guides.filter((o) => o.slug !== g.slug);
         {s.body.map((b) => <p>{b}</p>)}
         {s.list && <ul>{s.list.map((l) => <li>{l}</li>)}</ul>}
       </>)}
-      <p class="note">This guide is a practical summary. For detailed rulings, ask a scholar you trust. Our guides will walk you through every step on the journey.</p>
+      <p class="note">This guide is a practical summary. For detailed rulings, ask a scholar you trust. Our Ameer and guides walk groups through every step on the journey.</p>
       {others.length > 0 && <p>Next: {others.map((o) => <a href={u(`/umrah-guide/${o.slug}/`)}>{o.title}</a>)}</p>}
     </article></div>
   </section>

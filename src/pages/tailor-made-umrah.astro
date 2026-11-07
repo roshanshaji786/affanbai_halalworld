@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Enquiry from '../components/Enquiry.astro';
+import { umrahWays, tailorOptions, faqs, site, waLink } from '../data/site';
+import { u } from '../lib/url';
+const way = umrahWays[0];
+const crumbs = [{ name: 'Tailor-made Umrah', href: '/tailor-made-umrah/' }];
+const tf = [
+  faqs[4],
+  { q: 'What is the shortest Umrah you can plan?', a: 'A comfortable minimum is about a week, with nights in both Makkah and Madinah. If you only have a few days we can plan a Makkah-only trip.' },
+  { q: 'Can I add a stopover on the way?', a: 'Yes. Dubai, Istanbul or Cairo stopovers are common. We arrange the visa and hotel for the stopover as well.' },
+  faqs[6],
+];
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'Service', name: 'Tailor-made Umrah', serviceType: 'Umrah travel planning', provider: { '@id': `${site.url}/#agency` }, areaServed: 'Kerala', description: way.short, url: new URL(u('/tailor-made-umrah/'), Astro.site).href },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: tf.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title="Tailor-made Umrah from Kerala, on your dates" description="Plan a private Umrah from Trivandrum or Kochi on your own dates, number of days and hotel distance from the Haram. A travel consultant builds it around your family's comfort." crumbs={crumbs} schema={schema}>
+  <PageHero label="Most requested" title='Tailor-made Umrah, <span class="accent">on your terms</span>' lead={way.short} crumbs={crumbs}>
+    <div class="hero-ctas">
+      <a class="btn btn--accent" href={waLink('Assalamu alaikum, I would like to plan a tailor-made Umrah.')} target="_blank" rel="noopener" data-wa="tailor-hero"><Icon name="whatsapp" />Start planning</a>
+      <a class="btn btn--line" href="#enquire">Fill in the form</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="head"><h2>You choose three things</h2><p class="lead">Everything else follows from these. We suggest what works if you are unsure.</p></div>
+      <div class="options">
+        <div><h3><Icon name="calendar" class="opt-icon" /> Days</h3><ul class="chips">{tailorOptions.days.map((d) => <li>{d}</li>)}</ul></div>
+        <div><h3><Icon name="pin" class="opt-icon" /> Distance from the Haram</h3><ul class="chips">{tailorOptions.distance.map((d) => <li>{d}</li>)}</ul></div>
+        <div><h3><Icon name="hotels" class="opt-icon" /> Hotel</h3><ul class="chips">{tailorOptions.hotel.map((d) => <li>{d}</li>)}</ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div>
+        <h2>What we take care of</h2>
+        <p class="lead">One consultant plans the whole trip and stays reachable while you travel.</p>
+      </div>
+      <ul class="ticks">
+        {way.points.map((p) => <li><Icon name="check" /><span>{p}</span></li>)}
+        <li><Icon name="check" /><span>Umrah visa, flights from TRV or COK, and transfers between the cities</span></li>
+        <li><Icon name="check" /><span>Ziyarat in Makkah and Madinah, with a guide if you want one</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div><h2>Questions</h2><p class="muted">Prefer to travel with a group? See our <a href={u('/group-umrah/')}>group Umrah with an Ameer</a>.</p></div>
+      <Faq items={tf} />
+    </div>
+  </section>
+
+  <Enquiry preset="Tailor-made Umrah" title="Tell us your dates and comfort." />
+</Base>

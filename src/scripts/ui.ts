@@ -33,17 +33,23 @@ document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => (io ? io.o
 
 // Enquiry form: builds a WhatsApp message, no server needed.
 document.querySelectorAll<HTMLFormElement>('form[data-enquiry]').forEach((form) => {
+  const trip = form.querySelector<HTMLSelectElement>('[data-trip]');
+  const umrahOnly = form.querySelector<HTMLElement>('[data-umrah-only]');
+  const isTailor = () => /tailor/i.test(trip?.value ?? '');
+  const sync = () => { if (umrahOnly) umrahOnly.hidden = !isTailor(); };
+  trip?.addEventListener('change', sync);
+  sync();
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
     const f = new FormData(form);
     const v = (k: string) => String(f.get(k) ?? '').trim();
     const lines = [
-      'Assalamu alaikum, I would like an Umrah quote.',
+      `Assalamu alaikum, I would like help with: ${v('trip') || 'a trip'}.`,
       v('name') && `Name: ${v('name')}`,
-      v('package') && `Package: ${v('package')}`,
-      v('month') && `Travel month: ${v('month')}`,
-      `Travellers: ${v('adults') || 1} adult(s)${Number(v('children')) ? `, ${v('children')} child(ren)` : ''}${Number(v('elders')) ? `, ${v('elders')} elder(s) needing help` : ''}`,
-      v('from') && `Flying from: ${v('from')}`,
+      v('month') && `Month: ${v('month')}`,
+      v('people') && `Travellers: ${v('people')}`,
+      isTailor() && v('days') && `Days: ${v('days')}`,
+      isTailor() && v('distance') && `Hotel distance: ${v('distance')}`,
       v('note') && `Note: ${v('note')}`,
     ].filter(Boolean);
     const url = `https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(lines.join('\n'))}`;

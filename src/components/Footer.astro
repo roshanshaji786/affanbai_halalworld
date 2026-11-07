@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
-import { site, packages, cities, guides } from '../data/site';
+import { site, cities } from '../data/site';
+import { nav } from '../data/nav';
 import { u } from '../lib/url';
 const regs = site.registrations.filter((r) => r.value);
 const year = new Date().getFullYear();
@@ -10,19 +11,19 @@ const year = new Date().getFullYear();
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="brand" href={u('/')}><Logo /></a>
-        <p>Umrah packages and journeys of faith from Kerala, planned end to end by a team in Thiruvananthapuram.</p>
+        <p>A travel consultancy in Thiruvananthapuram. Umrah planned around you, and flights, visas and hotels for every other journey.</p>
         {regs.length > 0 && <div class="regs">{regs.map((r) => <span>{r.label}: {r.value}</span>)}</div>}
       </div>
       <div>
-        <h2>Packages</h2>
-        <ul>{packages.map((p) => <li><a href={u(`/umrah-packages/${p.slug}/`)}>{p.name}</a></li>)}</ul>
+        <h2>Halal World</h2>
+        <ul>{nav.map((n) => <li><a href={u(n.href)}>{n.label}</a></li>)}</ul>
       </div>
       <div>
-        <h2>Umrah from</h2>
+        <h2>Umrah</h2>
         <ul>
-          {cities.map((c) => <li><a href={u(`/umrah-packages-from-${c.slug}/`)}>{c.name}</a></li>)}
+          {cities.map((c) => <li><a href={u(`/umrah-packages-from-${c.slug}/`)}>Umrah from {c.name}</a></li>)}
           <li><a href={u('/umrah-visa/')}>Umrah visa</a></li>
-          {guides.map((g) => <li><a href={u(`/umrah-guide/${g.slug}/`)}>{g.title.split(',')[0]}</a></li>)}
+          <li><a href={u('/umrah-guide/')}>Umrah guide</a></li>
         </ul>
       </div>
       <div>
@@ -32,7 +33,6 @@ const year = new Date().getFullYear();
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
           <li>{[site.address.street, site.address.locality, site.address.region].filter(Boolean).join(', ')}</li>
           <li>{site.hoursText}</li>
-          <li><a href={u('/about/')}>About us</a></li>
         </ul>
       </div>
     </div>
