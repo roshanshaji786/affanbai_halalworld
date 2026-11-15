@@ -9,7 +9,7 @@ const isCurrent = (href: string) => here.startsWith(u(href));
 ---
 <header class="site-header" data-header>
   <div class="container">
-    <a class="brand" href={u('/')}><Logo /></a>
+    <a class="brand" href={u("/")}><Logo defs /></a>
     <nav class="nav" aria-label="Main">
       {nav.map((n) => <a href={u(n.href)} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a>)}
     </nav>
