@@ -11,6 +11,7 @@ const icon: Record<string, string> = { Visa: 'visa', Flights: 'flights', Hotels:
 {!past && (
   <article class="journey reveal" data-journey={j.date}>
     <div class="journey-body">
+      <div class="journey-col">
       <span class="departure-tag">Our next journey</span>
       <h2 class="journey-title" id="journey-title">{j.title}</h2>
       <div class="journey-when">
@@ -19,6 +20,8 @@ const icon: Record<string, string> = { Visa: 'visa', Flights: 'flights', Hotels:
         <span><b>{inr(j.price)}*</b>per person, from</span>
       </div>
       <ol class="journey-route" aria-label="Route">{j.route.map((r) => <li>{r}</li>)}</ol>
+      </div>
+      <div class="journey-col">
       <ul class="journey-hotels">{j.hotels.map((h) => <li><Icon name="hotels" /><span><small>{h.city}</small>{h.name}</span></li>)}</ul>
       <ul class="journey-incl" aria-label="Included">{j.includes.map((k) => <li><Icon name={icon[k] ?? 'check'} />{k}</li>)}</ul>
       <p class="journey-note">{j.departure}. *Fare depends on room sharing and is confirmed in writing.</p>
@@ -26,10 +29,8 @@ const icon: Record<string, string> = { Visa: 'visa', Flights: 'flights', Hotels:
         <a class="btn btn--gold" href={waJourney()} target="_blank" rel="noopener" data-wa="journey"><Icon name="whatsapp" />Book a seat</a>
         <a class="btn btn--ghost" href={u('/group-umrah/')}>Group details</a>
       </div>
+      </div>
     </div>
-    <a class="journey-poster" href={u(j.poster)} target="_blank" rel="noopener" aria-label={`Open the ${j.title} poster`}>
-      <img src={u(j.poster)} alt={`${j.title} poster: ${day.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}, ${j.nights} nights, ${j.hotels.map((h) => h.name).join(' and ')}`} width="719" height="1012" loading="lazy" decoding="async" />
-    </a>
   </article>
 )}
 <div data-journey-fallback hidden={!past}><Departure /></div>

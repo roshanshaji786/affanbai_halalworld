@@ -99,7 +99,6 @@ export const nextJourney = {
   departure: 'Flights from TRV and COK, with connections from anywhere in India',
   price: 122000, // per person, from
   includes: ['Visa', 'Flights', 'Hotels', 'Meals', 'Transfers', 'Sightseeing', 'Travel bags'],
-  poster: '/journeys/umrah-2027-03.webp',
 };
 
 /* ---------------------------------------------------------------------------
