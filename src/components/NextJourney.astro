@@ -1,0 +1,45 @@
+---
+// Featured "next journey" card (from the latest poster). Falls back to the next group departure once the date has passed.
+import Icon from './Icon.astro';
+import Departure from './Departure.astro';
+import { nextJourney as j, inr, waJourney } from '../data/site';
+import { u } from '../lib/url';
+const day = new Date(j.date + 'T00:00:00');
+const past = day.getTime() + 864e5 < Date.now();
+const icon: Record<string, string> = { Visa: 'visa', Flights: 'flights', Hotels: 'hotels', Meals: 'meals', Transfers: 'transfers', Sightseeing: 'ziyarat', 'Travel bags': 'bag' };
+---
+{!past && (
+  <article class="journey reveal" data-journey={j.date}>
+    <div class="journey-body">
+      <div class="journey-col">
+      <span class="departure-tag">Our next journey</span>
+      <h2 class="journey-title" id="journey-title">{j.title}</h2>
+      <div class="journey-when">
+        <span><b>{day.getDate()}</b>{day.toLocaleString('en-IN', { month: 'long', year: 'numeric' })}</span>
+        <span><b>{j.nights}</b>nights</span>
+        <span><b>{inr(j.price)}*</b>per person, from</span>
+      </div>
+      <ol class="journey-route" aria-label="Route">{j.route.map((r) => <li>{r}</li>)}</ol>
+      </div>
+      <div class="journey-col">
+      <ul class="journey-hotels">{j.hotels.map((h) => <li><Icon name="hotels" /><span><small>{h.city}</small>{h.name}</span></li>)}</ul>
+      <ul class="journey-incl" aria-label="Included">{j.includes.map((k) => <li><Icon name={icon[k] ?? 'check'} />{k}</li>)}</ul>
+      <p class="journey-note">{j.departure}. *Fare depends on room sharing and is confirmed in writing.</p>
+      <div class="journey-actions">
+        <a class="btn btn--gold" href={waJourney()} target="_blank" rel="noopener" data-wa="journey"><Icon name="whatsapp" />Book a seat</a>
+        <a class="btn btn--ghost" href={u('/group-umrah/')}>Group details</a>
+      </div>
+      </div>
+    </div>
+  </article>
+)}
+<div data-journey-fallback hidden={!past}><Departure /></div>
+<script>
+  // If the site has not been rebuilt since the journey left, show the next group departure instead.
+  const card = document.querySelector<HTMLElement>('[data-journey]');
+  if (card && new Date(card.dataset.journey + 'T23:59:59') < new Date()) {
+    card.hidden = true;
+    const fb = document.querySelector<HTMLElement>('[data-journey-fallback]');
+    if (fb) fb.hidden = false;
+  }
+</script>

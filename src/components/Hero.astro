@@ -1,0 +1,73 @@
+---
+import Icon from './Icon.astro';
+import { waLink } from '../data/site';
+import { u } from '../lib/url';
+const strip = [
+  ['Flights', 'International and domestic'],
+  ['Visas', 'Tourist, visit and Umrah'],
+  ['Hotels', 'Anywhere in the world'],
+  ['Transfers', 'Airport and intercity'],
+  ['Holidays', 'Tours and sightseeing'],
+  ['Umrah', 'Tailor-made and groups'],
+];
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="hero-eyebrow"><b>Halal World</b>Travel consultancy, all India</span>
+      <h1 id="hero-title">Travel through the earth, <span class="accent">planned around you</span></h1>
+      <p class="lead">Halal World is a travel consultancy for families and businesses across India. We book flights, arrange visas, find hotels and plan holidays and Umrah, with one consultant looking after your trip from the first call until you are home.</p>
+      <div class="hero-ctas">
+        <a class="btn btn--gold" href={waLink('Assalamu alaikum, I would like help planning a trip.')} target="_blank" rel="noopener" data-wa="hero"><Icon name="whatsapp" />Plan my trip</a>
+        <a class="btn btn--ghost" href={u('/#services')}>Our services <Icon name="arrow" /></a>
+      </div>
+      <ul class="hero-trust">
+        <li>Flights and visas</li>
+        <li>Hotels and holidays worldwide</li>
+        <li>Umrah, tailor-made or in groups</li>
+      </ul>
+    </div>
+    <div class="hero-visual" data-globe>
+      <img class="globe-fallback" src={u('/globe-fallback.svg')} alt="" width="600" height="600" fetchpriority="low" decoding="async" />
+    </div>
+  </div>
+  <div class="hero-route">
+    <div class="container route" aria-label="Our services">
+      {strip.map(([t, d], i) => <>{i > 0 && <span class="dot"></span>}<span class="stop">{t}<small>{d}</small></span></>)}
+    </div>
+  </div>
+</section>
+<script>
+  // Load the 3D globe only after the page is interactive, and only where it will run smoothly.
+  const host = document.querySelector<HTMLElement>('[data-globe]');
+  const nav = navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string }; deviceMemory?: number };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const slowNet = nav.connection?.saveData || /(^|-)2g/.test(nav.connection?.effectiveType ?? '');
+  const weak = (nav.deviceMemory !== undefined && nav.deviceMemory < 3) || (nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency < 4);
+  // Skip WebGL where it would be rendered in software (slow and battery-hungry); the still globe stays.
+  const gl = (() => {
+    try {
+      const ctx = document.createElement('canvas').getContext('webgl2');
+      if (!ctx) return false;
+      const dbg = ctx.getExtension('WEBGL_debug_renderer_info');
+      const r = dbg ? String(ctx.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+      ctx.getExtension('WEBGL_lose_context')?.loseContext();
+      return location.search.includes('globe=force') || !/swiftshader|llvmpipe|software|basic render/i.test(r);
+    } catch { return false; }
+  })();
+  if (host && !reduce && !slowNet && !weak && gl) {
+    let started = false;
+    const events = ['pointermove', 'pointerdown', 'touchstart', 'scroll', 'keydown', 'wheel'] as const;
+    const go = () => {
+      if (started) return;
+      started = true;
+      events.forEach((e) => removeEventListener(e, go));
+      import('../scripts/globe').then((m) => m.mount(host)).catch(() => {});
+    };
+    const arm = () => {
+      events.forEach((e) => addEventListener(e, go, { once: true, passive: true }));
+      setTimeout(() => ('requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : go()), 3500);
+    };
+    if (document.readyState === 'complete') arm(); else addEventListener('load', arm, { once: true });
+  }
+</script>
