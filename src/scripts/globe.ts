@@ -1,5 +1,5 @@
 /**
- * Hero globe: dotted earth, gold flight arcs from Kerala to the holy cities and beyond.
+ * Hero globe: dotted earth, gold flight arcs from across India to the holy cities and beyond.
  * Loaded lazily (after first paint) and only on capable devices. Tree-shaken three.js imports keep it small.
  */
 import {
@@ -26,18 +26,22 @@ import { LAND } from './land-points';
 type City = { name: string; lat: number; lon: number; label?: boolean; side?: 'left' | 'below' };
 
 const ORIGINS: City[] = [
-  { name: 'Thiruvananthapuram', lat: 8.48, lon: 76.92, label: true },
+  { name: 'India', lat: 21.15, lon: 79.09, label: true }, // Nagpur, the centre of India: we serve every city
+  { name: 'Mumbai', lat: 19.08, lon: 72.88 },
+  { name: 'Delhi', lat: 28.61, lon: 77.21 },
   { name: 'Kochi', lat: 10.15, lon: 76.4 },
+  { name: 'Hyderabad', lat: 17.39, lon: 78.49 },
+  { name: 'Kolkata', lat: 22.57, lon: 88.36 },
 ];
 const DESTS: (City & { from: number; h?: number })[] = [
-  { name: 'Jeddah', lat: 21.54, lon: 39.17, from: 0 },
-  { name: 'Makkah', lat: 21.42, lon: 39.83, from: 1, label: true, side: 'left' },
-  { name: 'Madinah', lat: 24.47, lon: 39.61, from: 0, label: true },
-  { name: 'Dubai', lat: 25.2, lon: 55.27, from: 1 },
-  { name: 'Istanbul', lat: 41.0, lon: 28.97, from: 0 },
-  { name: 'Kuala Lumpur', lat: 3.14, lon: 101.69, from: 1 },
+  { name: 'Jeddah', lat: 21.54, lon: 39.17, from: 1 },
+  { name: 'Makkah', lat: 21.42, lon: 39.83, from: 3, label: true, side: 'left' },
+  { name: 'Madinah', lat: 24.47, lon: 39.61, from: 2, label: true },
+  { name: 'Dubai', lat: 25.2, lon: 55.27, from: 4 },
+  { name: 'Istanbul', lat: 41.0, lon: 28.97, from: 2 },
+  { name: 'Kuala Lumpur', lat: 3.14, lon: 101.69, from: 5 },
   { name: 'Cairo', lat: 30.04, lon: 31.24, from: 1 },
-  { name: 'Baku', lat: 40.41, lon: 49.87, from: 0 },
+  { name: 'Jeddah', lat: 21.54, lon: 39.17, from: 5 },
 ];
 
 const GOLD = new Color('#e2c27d');
@@ -170,7 +174,7 @@ export function mount(host: HTMLElement) {
     globe.add(new Mesh(tube, arcMat(i * 0.17, 0.16 + (i % 3) * 0.03)));
   });
 
-  // City markers: pulsing rings, brighter at the Kerala origins.
+  // City markers: pulsing rings, brighter at the Indian origins.
   const ringMat = (strength: number, phase: number) =>
     new ShaderMaterial({
       uniforms: { uTime: uniforms.uTime, uS: { value: strength }, uP: { value: phase }, uColor: { value: GOLD } },
@@ -199,7 +203,7 @@ export function mount(host: HTMLElement) {
       const el = document.createElement('span');
       el.className = 'globe-label';
       if (c.side) el.dataset.side = c.side;
-      el.textContent = c.name === 'Thiruvananthapuram' ? 'Trivandrum' : c.name;
+      el.textContent = c.name;
       host.appendChild(el);
       labelled.push({ el, v });
     }

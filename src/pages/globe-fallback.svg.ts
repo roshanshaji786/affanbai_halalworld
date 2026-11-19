@@ -15,7 +15,7 @@ export function GET() {
   const tilt = new Quaternion().setFromEuler(new Euler(0.18, 0, 0));
   const P = (v: Vector3) => v.clone().applyQuaternion(q).applyQuaternion(tilt);
   let dots = '', hot = '';
-  const hotSpots = [vec(8.48, 76.92), vec(21.42, 39.83), vec(24.47, 39.61), vec(25.2, 55.27)];
+  const hotSpots = [vec(21.15, 79.09), vec(28.61, 77.21), vec(10.15, 76.4), vec(21.42, 39.83), vec(24.47, 39.61), vec(25.2, 55.27)];
   for (let i = 0; i < LAND.length; i += 2) {
     const v0 = vec(LAND[i] / 10, LAND[i + 1] / 10);
     const v = P(v0);
@@ -23,7 +23,7 @@ export function GET() {
     const seg = `M${(C + v.x * R).toFixed(1)} ${(C - v.y * R).toFixed(1)}h0`;
     if (hotSpots.some((h) => h.distanceTo(v0) < 0.3)) hot += seg; else dots += seg;
   }
-  const arcs = [[8.48, 76.92, 21.42, 39.83], [8.48, 76.92, 24.47, 39.61], [10.15, 76.4, 25.2, 55.27], [8.48, 76.92, 41, 28.97], [10.15, 76.4, 3.14, 101.69]]
+  const arcs = [[10.15, 76.4, 21.42, 39.83], [28.61, 77.21, 24.47, 39.61], [17.39, 78.49, 25.2, 55.27], [28.61, 77.21, 41, 28.97], [22.57, 88.36, 3.14, 101.69], [19.08, 72.88, 21.54, 39.17]]
     .map(([a1, o1, a2, o2]) => {
       const a = vec(a1, o1), b = vec(a2, o2), lift = 0.12 + a.angleTo(b) * 0.32;
       let d = '';

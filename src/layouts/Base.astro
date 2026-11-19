@@ -48,7 +48,7 @@ const org = {
   geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
   hasMap: site.mapsUrl,
   openingHoursSpecification: site.hours.map((h) => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: h.days, opens: h.opens, closes: h.closes })),
-  areaServed: ['Thiruvananthapuram', 'Kollam', 'Kochi', 'Kerala'].map((n) => ({ '@type': 'Place', name: n })),
+  areaServed: { '@type': 'Country', name: 'India' },
   knowsLanguage: ['ml', 'en', 'ar'],
   sameAs: Object.values(site.social).filter(Boolean),
 };

@@ -55,8 +55,8 @@ export const site = {
 export const groupDepartures = {
   months: [3, 7, 11], // March, July, November
   days: 15, // TODO: confirm usual group length
-  // TODO: add confirmed dates, e.g. '2027-03': { date: '2027-03-12', note: 'Seats open' }
-  confirmed: {} as Record<string, { date?: string; note?: string }>,
+  // Add confirmed dates as they are fixed, e.g. '2027-07': { date: '2027-07-10', note: 'Seats open' }
+  confirmed: { '2027-03': { date: '2027-03-20', note: 'Premium Short Stay Umrah, 7 nights' } } as Record<string, { date?: string; note?: string }>,
 };
 
 export type Departure = { key: string; label: string; month: number; year: number; date?: string; note?: string };
@@ -82,6 +82,25 @@ export function nextDepartures(count = 3, from = new Date()): Departure[] {
   }
   return out;
 }
+
+/* ---------------------------------------------------------------------------
+ * Next journey: the featured trip on the home page. Replace this when the next poster is ready.
+ * After its date passes, the home page falls back to the next group departure automatically.
+ * ------------------------------------------------------------------------- */
+export const nextJourney = {
+  title: 'Premium Short Stay Umrah',
+  date: '2027-03-20',
+  nights: 7,
+  route: ['Jeddah', 'Makkah', 'Madinah', 'Madinah airport'],
+  hotels: [
+    { city: 'Makkah', name: 'Anjum Makkah' },
+    { city: 'Madinah', name: 'Saja Al Madinah' },
+  ],
+  departure: 'Flights from TRV and COK, with connections from anywhere in India',
+  price: 122000, // per person, from
+  includes: ['Visa', 'Flights', 'Hotels', 'Meals', 'Transfers', 'Sightseeing', 'Travel bags'],
+  poster: '/journeys/umrah-2027-03.webp',
+};
 
 /* ---------------------------------------------------------------------------
  * The two ways to do Umrah with us.
@@ -126,8 +145,8 @@ export const tailorOptions = {
  * Other services.
  * ------------------------------------------------------------------------- */
 export const services = [
-  { icon: 'flights', title: 'International flights', text: 'Fares to the Gulf, Saudi Arabia, Europe and beyond, with the best routing from TRV or COK.' },
-  { icon: 'plane-in', title: 'Domestic flights', text: 'Tickets across India for work, family visits and connecting journeys.' },
+  { icon: 'flights', title: 'International flights', text: 'Fares to the Gulf, Saudi Arabia, Europe and beyond, from any airport in India.' },
+  { icon: 'plane-in', title: 'Domestic flights', text: 'Tickets between any two cities in India, for work, family and connections.' },
   { icon: 'visa', title: 'Visa assistance', text: 'Umrah, visit and tourist visas. We check your documents before they are filed.' },
   { icon: 'hotels', title: 'Hotels worldwide', text: 'Stays chosen for location and value, from Makkah to anywhere you travel.' },
   { icon: 'transfers', title: 'Transfers', text: 'Airport pick-ups and intercity travel, booked in advance.' },
@@ -270,7 +289,7 @@ export const guides: Guide[] = [
   {
     slug: 'how-to-perform-umrah',
     title: 'How to perform Umrah, step by step',
-    description: 'A simple guide to the four rites of Umrah: ihram, tawaf, sa’i and cutting the hair, for pilgrims travelling from Kerala.',
+    description: 'A simple guide to the four rites of Umrah: ihram, tawaf, sa’i and cutting the hair, for pilgrims travelling from India.',
     sections: [
       {
         heading: '1. Ihram',
@@ -377,6 +396,10 @@ export const arabic = {
   madinah: 'المدينة',
   welcome: 'أهلا وسهلا',
 };
+
+export function waJourney() {
+  return waLink(`Assalamu alaikum, I would like to book the ${nextJourney.title} on ${new Date(nextJourney.date + 'T00:00:00').toLocaleString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}.`);
+}
 
 export function waLink(text = 'Assalamu alaikum, I would like to plan a trip with Halal World.') {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;

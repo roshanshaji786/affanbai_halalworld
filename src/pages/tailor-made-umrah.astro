@@ -15,11 +15,11 @@ const tf = [
   faqs[6],
 ];
 const schema = [
-  { '@context': 'https://schema.org', '@type': 'Service', name: 'Tailor-made Umrah', serviceType: 'Umrah travel planning', provider: { '@id': `${site.url}/#agency` }, areaServed: 'Kerala', description: way.short, url: new URL(u('/tailor-made-umrah/'), Astro.site).href },
+  { '@context': 'https://schema.org', '@type': 'Service', name: 'Tailor-made Umrah', serviceType: 'Umrah travel planning', provider: { '@id': `${site.url}/#agency` }, areaServed: 'India', description: way.short, url: new URL(u('/tailor-made-umrah/'), Astro.site).href },
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: tf.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
 ---
-<Base title="Tailor-made Umrah from Kerala, on your dates" description="Plan a private Umrah from Trivandrum or Kochi on your own dates, number of days and hotel distance from the Haram. A travel consultant builds it around your family's comfort." crumbs={crumbs} schema={schema}>
+<Base title="Tailor-made Umrah from India, on your dates" description="Plan a private Umrah from anywhere in India on your own dates, number of days and hotel distance from the Haram. A travel consultant builds it around your family's comfort." crumbs={crumbs} schema={schema}>
   <PageHero label="Most requested" title='Tailor-made Umrah, <span class="accent">on your terms</span>' lead={way.short} crumbs={crumbs}>
     <div class="hero-ctas">
       <a class="btn btn--gold" href={waLink('Assalamu alaikum, I would like to plan a tailor-made Umrah.')} target="_blank" rel="noopener" data-wa="tailor-hero"><Icon name="whatsapp" />Start planning</a>
@@ -46,7 +46,7 @@ const schema = [
       </div>
       <ul class="ticks">
         {way.points.map((p) => <li><Icon name="check" /><span>{p}</span></li>)}
-        <li><Icon name="check" /><span>Umrah visa, flights from TRV or COK, and transfers between the cities</span></li>
+        <li><Icon name="check" /><span>Umrah visa, flights from your nearest airport in India, and transfers between the cities</span></li>
         <li><Icon name="check" /><span>Ziyarat in Makkah and Madinah, with a guide if you want one</span></li>
       </ul>
     </div>
