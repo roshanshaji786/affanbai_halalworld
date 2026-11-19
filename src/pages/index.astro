@@ -5,6 +5,7 @@ import NextJourney from '../components/NextJourney.astro';
 import Kicker from '../components/Kicker.astro';
 import Icon from '../components/Icon.astro';
 import Faq from '../components/Faq.astro';
+import talbiyah from '../data/talbiyah.json';
 import Enquiry from '../components/Enquiry.astro';
 import { site, umrahWays, services, faqs, cities, arabic, nextJourney } from '../data/site';
 import { u } from '../lib/url';
@@ -36,7 +37,7 @@ const schema = [{
 }];
 ---
 <Base
-  title="Halal World | Umrah and travel consultancy for all of India"
+  title="Halal World | Travel consultancy for flights, visas, hotels and Umrah"
   description="Halal World is a travel consultancy serving travellers across India. Tailor-made Umrah on your dates and hotel distance, group Umrah with an Ameer every March, July and November, plus flights, visas and hotels worldwide."
   schema={schema}
 >
@@ -63,6 +64,7 @@ const schema = [{
     <div class="container">
       <div class="head reveal">
         <Kicker ar={arabic.umrah} text="Umrah" />
+        <svg class="talbiyah talbiyah--light" viewBox={talbiyah.viewBox} role="img" aria-label={`${talbiyah.text} (Labbayk Allahumma Labbayk)`} lang="ar"><path d={talbiyah.d} /></svg>
         <h2 id="umrah-title">Two ways to go. <span class="accent">Both planned by us.</span></h2>
         <p class="lead">Most of our pilgrims choose a tailor-made Umrah. If you would rather travel with others and a guide, join one of our three group departures a year.</p>
       </div>

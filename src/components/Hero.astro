@@ -1,27 +1,30 @@
 ---
 import Icon from './Icon.astro';
-import talbiyah from '../data/talbiyah.json';
-import { site, waLink } from '../data/site';
+import { waLink } from '../data/site';
 import { u } from '../lib/url';
+const strip = [
+  ['Flights', 'International and domestic'],
+  ['Visas', 'Tourist, visit and Umrah'],
+  ['Hotels', 'Anywhere in the world'],
+  ['Transfers', 'Airport and intercity'],
+  ['Holidays', 'Tours and sightseeing'],
+  ['Umrah', 'Tailor-made and groups'],
+];
 ---
 <section class="hero" aria-labelledby="hero-title">
   <div class="container hero-inner">
     <div class="hero-copy">
-      <span class="hero-eyebrow"><b>Umrah</b>Travel consultancy for all of India</span>
-      <svg class="talbiyah" viewBox={talbiyah.viewBox} role="img" aria-label={`${talbiyah.text} (Labbayk Allahumma Labbayk)`} lang="ar">
-        <path d={talbiyah.d} />
-      </svg>
-      <span class="talbiyah-tr">“Here I am, O Allah, here I am.”</span>
-      <h1 id="hero-title">Umrah and travel, <span class="accent">planned around you</span></h1>
-      <p class="lead">Tell us your dates, how many days and how close to the Haram you want to stay. We build the Umrah to fit, and book every other trip too.</p>
+      <span class="hero-eyebrow"><b>Travel</b>Consultancy for travellers across India</span>
+      <h1 id="hero-title">Your journey, <span class="accent">planned around you</span></h1>
+      <p class="lead">Flights, visas, hotels and holidays anywhere in the world, and Umrah built around your dates. One consultant plans it all and stays with you until you are home.</p>
       <div class="hero-ctas">
-        <a class="btn btn--gold" href={waLink('Assalamu alaikum, I would like to plan a tailor-made Umrah.')} target="_blank" rel="noopener" data-wa="hero"><Icon name="whatsapp" />Plan my Umrah</a>
-        <a class="btn btn--ghost" href={u('/#departure')}>Our next journey <Icon name="arrow" /></a>
+        <a class="btn btn--gold" href={waLink('Assalamu alaikum, I would like help planning a trip.')} target="_blank" rel="noopener" data-wa="hero"><Icon name="whatsapp" />Plan my trip</a>
+        <a class="btn btn--ghost" href={u('/#services')}>Our services <Icon name="arrow" /></a>
       </div>
       <ul class="hero-trust">
-        <li>Tailor-made, your dates</li>
-        <li>Groups with an Ameer</li>
-        <li>Flights, visas, hotels</li>
+        <li>Personal travel consultant</li>
+        <li>Clear fares in writing</li>
+        <li>Support until you are home</li>
       </ul>
     </div>
     <div class="hero-visual" data-globe>
@@ -29,12 +32,8 @@ import { u } from '../lib/url';
     </div>
   </div>
   <div class="hero-route">
-    <div class="container route" aria-label="Typical Umrah route">
-      <span class="stop">India<small>Any city</small></span><span class="dot"></span>
-      <span class="stop">JED<small>Jeddah</small></span><span class="dot"></span>
-      <span class="stop">Makkah<small>Umrah and prayers</small></span><span class="dot"></span>
-      <span class="stop">Madinah<small>Masjid an-Nabawi</small></span><span class="dot"></span>
-      <span class="stop">Home<small>with Zamzam</small></span>
+    <div class="container route" aria-label="Our services">
+      {strip.map(([t, d], i) => <>{i > 0 && <span class="dot"></span>}<span class="stop">{t}<small>{d}</small></span></>)}
     </div>
   </div>
 </section>

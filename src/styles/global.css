@@ -506,3 +506,6 @@ a.service { text-decoration: none; color: inherit; }
 }
 .journey .btn--ghost { color: var(--ivory-100); border-color: rgba(236, 214, 162, 0.4); }
 @media (min-width: 900px) { .journey-poster { background: var(--maroon-950); } .journey-poster img { object-fit: contain; } }
+.talbiyah--light { display: block; width: min(80%, 320px); color: var(--maroon-700); }
+.talbiyah--light path { stroke: var(--maroon-600); }
+@media (min-width: 900px) { .hero h1 { max-width: 12ch; } }
