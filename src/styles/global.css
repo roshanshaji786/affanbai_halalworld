@@ -508,4 +508,4 @@ a.service { text-decoration: none; color: inherit; }
 @media (min-width: 900px) { .journey-poster { background: var(--maroon-950); } .journey-poster img { object-fit: contain; } }
 .talbiyah--light { display: block; width: min(80%, 320px); color: var(--maroon-700); }
 .talbiyah--light path { stroke: var(--maroon-600); }
-@media (min-width: 900px) { .hero h1 { max-width: 12ch; } }
+@media (min-width: 900px) { .hero h1 { max-width: 14ch; font-size: clamp(3rem, 5.4vw, 4.6rem); } }
