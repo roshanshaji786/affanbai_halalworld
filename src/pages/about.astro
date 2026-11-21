@@ -7,13 +7,13 @@ import { site } from '../data/site';
 const crumbs = [{ name: 'About', href: '/about/' }];
 const regs = site.registrations.filter((r) => r.value);
 ---
-<Base title="About Halal World, travel consultancy" description="Halal World is a travel consultancy based in Thiruvananthapuram, serving travellers across India. Umrah is our main work; we also book flights, visas, hotels and holidays." crumbs={crumbs}>
-  <PageHero label="About us" title='A small consultancy, <span class="accent">not a call centre</span>' lead={`${site.name} is a travel consultancy serving travellers across India, from our office in Thiruvananthapuram. You talk to the person who plans your trip, from the first message to the flight home.`} crumbs={crumbs} />
+<Base title="About Halal World, travel consultancy" description="Halal World is a travel consultancy based in Thiruvananthapuram, serving travellers. Umrah is our main work; we also book flights, visas, hotels and holidays." crumbs={crumbs}>
+  <PageHero label="About us" title='A small consultancy, <span class="accent">not a call centre</span>' lead={`${site.name} is a travel consultancy, working from our office in Thiruvananthapuram. You talk to the person who plans your trip, from the first message to the flight home.`} crumbs={crumbs} />
   <section class="section">
     <div class="container split">
       <div class="prose">
         <h2>How we work</h2>
-        <p>Umrah is the heart of what we do. Most pilgrims come to us for a tailor-made trip planned around their dates and comfort; others join one of our group departures with an Ameer in March, July or November.</p>
+        <p>Umrah is the heart of what we do. Most pilgrims come to us for a tailor-made trip planned around their dates and comfort; others join one of our pre-published guided group departures in March, July or November.</p>
         <p>We also book flights, visas, hotels and holidays for the same families and businesses, so one consultant knows your preferences.</p>
         <h2>Registrations</h2>
         {regs.length > 0

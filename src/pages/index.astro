@@ -12,7 +12,7 @@ import { u } from '../lib/url';
 
 const allServices = [
   { icon: 'sliders', title: 'Tailor-made Umrah', text: 'Your dates, your days and your hotel distance from the Haram.', href: '/tailor-made-umrah/' },
-  { icon: 'users', title: 'Group Umrah with an Ameer', text: 'Guided groups every March, July and November.', href: '/group-umrah/' },
+  { icon: 'users', title: 'Pre-published guided group departures', text: 'Guided groups every March, July and November.', href: '/group-umrah/' },
   ...services.map((s) => ({ ...s, href: s.icon === 'visa' ? '/umrah-visa/' : '/travel-services/' })),
 ];
 const homeFaqs = [faqs[4], faqs[5], faqs[0], faqs[3]];
@@ -38,7 +38,7 @@ const schema = [{
 ---
 <Base
   title="Halal World | Travel consultancy for flights, visas, hotels and Umrah"
-  description="Halal World is a travel consultancy serving travellers across India. Tailor-made Umrah on your dates and hotel distance, group Umrah with an Ameer every March, July and November, plus flights, visas and hotels worldwide."
+  description="Halal World is a travel consultancy serving travellers. Tailor-made Umrah on your dates and hotel distance, guided group departures every March, July and November, plus flights, visas and hotels worldwide."
   schema={schema}
 >
   <Hero />
@@ -47,8 +47,8 @@ const schema = [{
     <div class="container">
       <div class="head reveal">
         <Kicker ar={arabic.services} text="What we do" />
-        <h2 id="svc-title">Every journey, <span class="accent">one consultant.</span></h2>
-        <p class="lead">Umrah is the heart of our work, and we book every other trip too, for travellers from anywhere in India.</p>
+        <h2 id="svc-title">Every journey, <span class="accent">Insha Allah.</span></h2>
+        <p class="lead">Umrah is the heart of our work, and we book every other trip too, for every traveller.</p>
       </div>
       <div class="services services--all reveal">
         {allServices.map((s) => <a class="service" href={u(s.href)}><Icon name={s.icon} /><div><h3>{s.title}</h3><p>{s.text}</p></div></a>)}

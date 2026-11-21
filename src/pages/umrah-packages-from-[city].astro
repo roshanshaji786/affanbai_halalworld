@@ -30,7 +30,7 @@ const schema = [
 ];
 const others = cities.filter((o) => o.slug !== c.slug);
 ---
-<Base title={`Umrah packages from ${label}`} description={`Tailor-made Umrah and group Umrah with an Ameer from ${label}, flying from ${c.airportCode}. Serving ${c.nearby.slice(0, 5).join(', ')} and nearby. Call ${site.phone}.`} crumbs={crumbs} schema={schema}>
+<Base title={`Umrah packages from ${label}`} description={`Tailor-made Umrah and guided group departures from ${label}, flying from ${c.airportCode}. Serving ${c.nearby.slice(0, 5).join(', ')} and nearby. Call ${site.phone}.`} crumbs={crumbs} schema={schema}>
   <PageHero label={`Umrah from ${c.name}`} title={`Umrah from <span class="accent">${c.name}</span>`} lead={c.intro} crumbs={crumbs}>
     <ul class="facts">
       <li><b>{c.airportCode}</b>{c.airport.replace(' International Airport', '')} airport</li>

@@ -12,7 +12,7 @@ const when = next.date ? fmt(next.date) : next.label;
   <div class="departure-main">
     <span class="departure-tag">Next group departure</span>
     <span class="departure-when" data-when>{when}</span>
-    <span class="departure-meta">Group Umrah with an Ameer · about {groupDepartures.days} days · {next.note ?? 'Seats open now'}</span>
+    <span class="departure-meta">Pre-published guided group departure · about {groupDepartures.days} days · {next.note ?? 'Seats open now'}</span>
   </div>
   <ul class="departure-next" aria-label="Following departures" data-later>
     {later.map((d) => <li>Then {d.label}</li>)}

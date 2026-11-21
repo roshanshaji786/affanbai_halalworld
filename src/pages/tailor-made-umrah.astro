@@ -19,7 +19,7 @@ const schema = [
   { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: tf.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
 ---
-<Base title="Tailor-made Umrah from India, on your dates" description="Plan a private Umrah from anywhere in India on your own dates, number of days and hotel distance from the Haram. A travel consultant builds it around your family's comfort." crumbs={crumbs} schema={schema}>
+<Base title="Tailor-made Umrah from India, on your dates" description="Plan a private Umrah on your own dates, number of days and hotel distance from the Haram. A travel consultant builds it around your family's comfort." crumbs={crumbs} schema={schema}>
   <PageHero label="Most requested" title='Tailor-made Umrah, <span class="accent">on your terms</span>' lead={way.short} crumbs={crumbs}>
     <div class="hero-ctas">
       <a class="btn btn--gold" href={waLink('Assalamu alaikum, I would like to plan a tailor-made Umrah.')} target="_blank" rel="noopener" data-wa="tailor-hero"><Icon name="whatsapp" />Start planning</a>
@@ -54,7 +54,7 @@ const schema = [
 
   <section class="section">
     <div class="container split">
-      <div><h2>Questions</h2><p class="muted">Prefer to travel with a group? See our <a href={u('/group-umrah/')}>group Umrah with an Ameer</a>.</p></div>
+      <div><h2>Questions</h2><p class="muted">Prefer to travel with a group? See our <a href={u('/group-umrah/')}>pre-published guided group departures</a>.</p></div>
       <Faq items={tf} />
     </div>
   </section>

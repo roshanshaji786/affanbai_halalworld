@@ -96,7 +96,7 @@ export const nextJourney = {
     { city: 'Makkah', name: 'Anjum Makkah' },
     { city: 'Madinah', name: 'Saja Al Madinah' },
   ],
-  departure: 'Flights from TRV and COK, with connections from anywhere in India',
+  departure: 'Flights from TRV and COK, with connections from other cities',
   price: 122000, // per person, from
   includes: ['Visa', 'Flights', 'Hotels', 'Meals', 'Transfers', 'Sightseeing', 'Travel bags'],
 };
@@ -120,11 +120,11 @@ export const umrahWays = [
   },
   {
     slug: 'group-departures',
-    name: 'Group Umrah with an Ameer',
+    name: 'Pre-published guided group departures',
     kicker: 'Every four months',
-    short: 'Travel with a guided group led by an Ameer, on fixed departures in March, July and November.',
+    short: 'Travel with a guided group on pre-published departures in March, July and November.',
     points: [
-      'Led by an experienced Ameer from departure to return',
+      'Led by an experienced guide from departure to return',
       'Group classes before you fly',
       'Shared ziyarat, prayers and reminders throughout',
       'Fixed dates, so you can plan leave early',
@@ -144,8 +144,8 @@ export const tailorOptions = {
  * Other services.
  * ------------------------------------------------------------------------- */
 export const services = [
-  { icon: 'flights', title: 'International flights', text: 'Fares to the Gulf, Saudi Arabia, Europe and beyond, from any airport in India.' },
-  { icon: 'plane-in', title: 'Domestic flights', text: 'Tickets between any two cities in India, for work, family and connections.' },
+  { icon: 'flights', title: 'International flights', text: 'Fares to the Gulf, Saudi Arabia, Europe and beyond, from any airport.' },
+  { icon: 'plane-in', title: 'Domestic flights', text: 'Tickets between any two cities, for work, family and connections.' },
   { icon: 'visa', title: 'Visa assistance', text: 'Umrah, visit and tourist visas. We check your documents before they are filed.' },
   { icon: 'hotels', title: 'Hotels worldwide', text: 'Stays chosen for location and value, from Makkah to anywhere you travel.' },
   { icon: 'transfers', title: 'Transfers', text: 'Airport pick-ups and intercity travel, booked in advance.' },
@@ -227,7 +227,7 @@ export const cities: City[] = [
     airportNote: 'Kollam is about 70 km from TRV, so most of our Kollam pilgrims fly from Trivandrum.',
     nearby: ['Karunagappally', 'Kottarakkara', 'Punalur', 'Chathannoor', 'Paravur', 'Sasthamcotta', 'Kottiyam', 'Kayamkulam'],
     intro:
-      'Families in Kollam are a short drive from our Trivandrum office and from Thiruvananthapuram International Airport (TRV). We plan tailor-made Umrah for Kollam pilgrims, or a seat on our next group with an Ameer.',
+      'Families in Kollam are a short drive from our Trivandrum office and from Thiruvananthapuram International Airport (TRV). We plan tailor-made Umrah for Kollam pilgrims, or a seat on our next guided group departure.',
     why: 'You can visit us in Trivandrum or send documents on WhatsApp, and we can arrange a vehicle from Kollam to the airport for your group.',
     faqs: [
       {
@@ -240,7 +240,7 @@ export const cities: City[] = [
       },
       {
         q: 'Do you have group departures for Kollam?',
-        a: 'Yes. Kollam pilgrims join our group departures with an Ameer in March, July and November, travelling with families from the same part of Kerala.',
+        a: 'Yes. Kollam pilgrims join our guided group departures in March, July and November, travelling with families from the same part of Kerala.',
       },
     ],
   },
@@ -269,7 +269,7 @@ export const faqs = [
   },
   {
     q: 'When are the group departures?',
-    a: 'Groups with an Ameer leave every four months, in March, July and November. Message us to hold a seat on the next one.',
+    a: 'Guided group departures leave every four months, in March, July and November. Message us to hold a seat on the next one.',
   },
   {
     q: 'Do you help elderly pilgrims?',

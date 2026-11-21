@@ -28,7 +28,7 @@ const others = guides.filter((o) => o.slug !== g.slug);
         {s.body.map((b) => <p>{b}</p>)}
         {s.list && <ul>{s.list.map((l) => <li>{l}</li>)}</ul>}
       </>)}
-      <p class="note">This guide is a practical summary. For detailed rulings, ask a scholar you trust. Our Ameer and guides walk groups through every step on the journey.</p>
+      <p class="note">This guide is a practical summary. For detailed rulings, ask a scholar you trust. Our guides walk groups through every step on the journey.</p>
       {others.length > 0 && <p>Next: {others.map((o) => <a href={u(`/umrah-guide/${o.slug}/`)}>{o.title}</a>)}</p>}
     </article></div>
   </section>

@@ -12,7 +12,7 @@ const crumbs = [{ name: 'Group Umrah', href: '/group-umrah/' }];
 const upcoming = nextDepartures(3);
 const gf = [
   faqs[5],
-  { q: 'Who is the Ameer?', a: 'An experienced leader who has guided many groups. He leads the rites, the prayers and the reminders, and is the first person you turn to on the journey.' },
+  { q: 'Who guides the group?', a: 'An experienced guide who has led many groups. He leads the rites, the prayers and the reminders, and is the first person you turn to on the journey.' },
   { q: 'Can I join alone?', a: 'Yes. Many pilgrims join on their own. We arrange shared rooms with others from the group of the same gender.' },
   faqs[3],
 ];
@@ -21,7 +21,7 @@ const schema = [
   ...upcoming.map((d) => ({
     '@context': 'https://schema.org',
     '@type': 'TouristTrip',
-    name: `Group Umrah with an Ameer, ${d.label}`,
+    name: `Pre-published guided group departure, ${d.label}`,
     description: way.short,
     touristType: 'Pilgrims',
     provider: { '@id': `${site.url}/#agency` },
@@ -29,8 +29,8 @@ const schema = [
   })),
 ];
 ---
-<Base title="Group Umrah with an Ameer: March, July, November" description={`Join Halal World's group Umrah from India, led by an Ameer. Fixed departures every four months: March, July and November. Next group: ${upcoming[0].label}.`} crumbs={crumbs} schema={schema}>
-  <PageHero label={way.kicker} title='Group Umrah <span class="accent">with an Ameer</span>' lead={way.short} crumbs={crumbs} />
+<Base title="Pre-published guided group departures: March, July, November" description={`Join Halal World's pre-published guided group Umrah departures. Fixed departures every four months: March, July and November. Next group: ${upcoming[0].label}.`} crumbs={crumbs} schema={schema}>
+  <PageHero label={way.kicker} title='Pre-published <span class="accent">guided group departures</span>' lead={way.short} crumbs={crumbs} />
 
   <section class="section section--tight" style="padding-top:clamp(28px,5vw,48px)">
     <div class="container"><Departure /></div>
@@ -38,10 +38,10 @@ const schema = [
 
   <section class="section">
     <div class="container split">
-      <div><h2>How a group works</h2><p class="lead">About {groupDepartures.days} days, with nights in Makkah and Madinah, travelling together. Join from any city in India.</p></div>
+      <div><h2>How a group works</h2><p class="lead">About {groupDepartures.days} days, with nights in Makkah and Madinah, travelling together.</p></div>
       <ol class="timeline">
-        <li><small>Before</small><div><h3>Class and briefing</h3><p>Learn the rites, meet the Ameer and the group, and get your packing list.</p></div></li>
-        <li><small>Makkah</small><div><h3>Umrah together</h3><p>The Ameer leads ihram, tawaf and sa’i, then prayers and ziyarat through the stay.</p></div></li>
+        <li><small>Before</small><div><h3>Class and briefing</h3><p>Learn the rites, meet the guide and the group, and get your packing list.</p></div></li>
+        <li><small>Makkah</small><div><h3>Umrah together</h3><p>The guide leads ihram, tawaf and sa’i, then prayers and ziyarat through the stay.</p></div></li>
         <li><small>Madinah</small><div><h3>Masjid an-Nabawi</h3><p>Prayers, Rawdah visits where permits allow, and ziyarat of the city.</p></div></li>
         <li><small>Home</small><div><h3>Return with Zamzam</h3><p>We stay in touch until everyone is home.</p></div></li>
       </ol>
@@ -62,5 +62,5 @@ const schema = [
     </div>
   </section>
 
-  <Enquiry preset="Group Umrah with an Ameer" title="Hold a seat on the next group." />
+  <Enquiry preset="Pre-published guided group departures" title="Hold a seat on the next group." />
 </Base>

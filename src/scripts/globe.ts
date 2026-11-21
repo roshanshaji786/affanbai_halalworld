@@ -40,9 +40,9 @@ const DESTS: (City & { from: number; h?: number })[] = [
   { name: 'Baku', lat: 40.41, lon: 49.87, from: 0 },
 ];
 
-const GOLD = new Color('#e2c27d');
-const GOLD_DEEP = new Color('#c9a45c');
-const IVORY = new Color('#f3e6cf');
+const GOLD = new Color('#ffffff');
+const GOLD_DEEP = new Color('#9fa2a8');
+const IVORY = new Color('#c9cbd0');
 
 export function vec(lat: number, lon: number, r = 1) {
   const phi = ((90 - lat) * Math.PI) / 180;
@@ -85,7 +85,7 @@ export function mount(host: HTMLElement) {
     new ShaderMaterial({
       uniforms: { uRim: { value: GOLD_DEEP } },
       vertexShader: `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
-      fragmentShader: `uniform vec3 uRim; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - max(dot(vN, vV), 0.), 2.6); vec3 base = mix(vec3(0.09,0.03,0.02), vec3(0.18,0.06,0.04), vN.y*.5+.5); gl_FragColor = vec4(base + uRim*f*0.55, 1.); }`,
+      fragmentShader: `uniform vec3 uRim; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - max(dot(vN, vV), 0.), 2.6); vec3 base = mix(vec3(0.06,0.06,0.065), vec3(0.15,0.15,0.16), vN.y*.5+.5); gl_FragColor = vec4(base + uRim*f*0.55, 1.); }`,
     }),
   );
   globe.add(body);
@@ -147,7 +147,7 @@ export function mount(host: HTMLElement) {
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
       fragmentShader: `uniform float uTime; uniform float uOff; uniform float uSpeed; uniform vec3 uColor; varying vec2 vUv;
         void main(){ float head = fract(uTime*uSpeed + uOff); float x = vUv.x; float tail = smoothstep(head-0.28, head, x) * step(x, head);
-          float base = 0.16; float a = base + tail*0.95; vec3 c = mix(uColor, vec3(1.,.97,.9), tail*tail);
+          float base = 0.16; float a = base + tail*0.95; vec3 c = mix(uColor, vec3(1.), tail*tail);
           float edge = smoothstep(0., .04, x)*smoothstep(1., .96, x); gl_FragColor = vec4(c, a*edge); }`,
       transparent: true,
       depthWrite: false,
